@@ -1,4 +1,8 @@
-﻿namespace Market.Infrastructure.Database.Configurations.Identity;
+﻿using Market.Domain.Entities.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Market.Infrastructure.Database.Configurations.Identity;
 
 public sealed class UserEntityConfiguration : IEntityTypeConfiguration<MarketUserEntity>
 {
@@ -26,7 +30,7 @@ public sealed class UserEntityConfiguration : IEntityTypeConfiguration<MarketUse
             .HasDefaultValue(false);
 
         b.Property(x => x.IsEmployee)
-            .HasDefaultValue(true); // Default: regular user
+            .HasDefaultValue(false); // Default: regular user
 
         b.Property(x => x.TokenVersion)
             .HasDefaultValue(0);
@@ -38,5 +42,11 @@ public sealed class UserEntityConfiguration : IEntityTypeConfiguration<MarketUse
         b.HasMany(x => x.RefreshTokens)
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId);
+
+        b.HasOne(x => x.Grad)
+            .WithMany()
+            .HasForeignKey(x => x.GradId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

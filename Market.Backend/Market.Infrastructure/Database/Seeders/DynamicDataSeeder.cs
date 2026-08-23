@@ -8,8 +8,6 @@ public static class DynamicDataSeeder
 {
     public static async Task SeedAsync(DatabaseContext context)
     {
-        await context.Database.EnsureCreatedAsync();
-
         await SeedUsersAsync(context);
     }
 
@@ -25,17 +23,28 @@ public static class DynamicDataSeeder
 
         var admin = new MarketUserEntity
         {
-            Email = "admin@market.local",
+            Email = "admin@ebiblioteka.local",
             PasswordHash = hasher.HashPassword(null!, "Admin123!"),
+
+            FirstName = "Admin",
+            LastName = "Biblioteka",
+            PhoneNumber = "000000000",
+            Address = "e-Biblioteka",
+
             IsAdmin = true,
             IsEnabled = true,
         };
 
         var user = new MarketUserEntity
         {
-            Email = "manager@market.local",
+            Email = "user@ebiblioteka.local",
             PasswordHash = hasher.HashPassword(null!, "User123!"),
-            IsManager = true,
+
+            FirstName = "Demo",
+            LastName = "Korisnik",
+            PhoneNumber = "000000001",
+            Address = "e-Biblioteka",
+
             IsEnabled = true,
         };
 
@@ -43,7 +52,12 @@ public static class DynamicDataSeeder
         {
             Email = "string",
             PasswordHash = hasher.HashPassword(null!, "string"),
-            IsEmployee = true,
+
+            FirstName = "Swagger",
+            LastName = "User",
+            PhoneNumber = "000000002",
+            Address = "e-Biblioteka",
+
             IsEnabled = true,
         };
 
@@ -51,7 +65,12 @@ public static class DynamicDataSeeder
         {
             Email = "test",
             PasswordHash = hasher.HashPassword(null!, "test123"),
-            IsEmployee = true,
+
+            FirstName = "Test",
+            LastName = "User",
+            PhoneNumber = "000000003",
+            Address = "e-Biblioteka",
+
             IsEnabled = true,
         };
 
@@ -64,6 +83,6 @@ public static class DynamicDataSeeder
 
         await context.SaveChangesAsync();
 
-        Console.WriteLine("Dynamic seed: demo users added.");
+        Console.WriteLine("Dynamic seed: e-Biblioteka demo users added.");
     }
 }

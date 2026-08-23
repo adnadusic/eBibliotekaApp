@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Market.Domain.Common;
+using Market.Domain.Entities.Identity;
+using Market.Domain.Enums;
 
 namespace Market.Domain.Entities.Catalog
 {
-    public class Rezervacija
+    public class Rezervacija : BaseEntity
     {
-        public int Id { get; set; }
         public int UserId { get; set; }
         public int BookId { get; set; }
         public DateTime DatumRezervacije { get; set; }
         public DateTime DatumIsteka { get; set; }
-        public string Status { get; set; }
+        public ReservationStatus Status { get; set; }
         public int? Prioritet { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
 
-        public Korisnik User { get; set; }
+        public MarketUserEntity User { get; set; }
         public Knjiga Book { get; set; }
 
         public ICollection<Posudba> Posudbe { get; set; }

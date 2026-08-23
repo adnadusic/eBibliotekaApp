@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Market.Domain.Common;
 
 namespace Market.Domain.Entities.Catalog
 {
-    public class KnjigaZanr
+    public class KnjigaZanr : BaseEntity
     {
-        public int Id { get; set; }
-
         public int BookId { get; set; }
         public int GenreId { get; set; }
 
