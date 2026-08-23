@@ -1,0 +1,21 @@
+﻿using Market.Application.Modules.Catalog.Books.Commands.Delete;
+
+public sealed class DeleteBookCommandHandler(IAppDbContext ctx)
+    : IRequestHandler<DeleteBookCommand>
+{
+    public async Task Handle(
+        DeleteBookCommand request,
+        CancellationToken ct)
+    {
+        var book = await ctx.Knjige
+            .FirstOrDefaultAsync(
+                x => x.Id == request.Id && !x.IsDeleted,
+                ct)
+            ?? throw new MarketNotFoundException("Book was not found.");
+
+        book.IsDeleted = true;
+        book.ModifiedAtUtc = DateTime.UtcNow;
+
+        await ctx.SaveChangesAsync(ct);
+    }
+}
