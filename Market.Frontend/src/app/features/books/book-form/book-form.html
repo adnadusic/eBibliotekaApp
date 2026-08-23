@@ -1,0 +1,214 @@
+<section class="book-form-page">
+  <div class="page-header">
+    <div>
+      <h1>{{ isEditMode ? 'Uredi knjigu' : 'Dodaj knjigu' }}</h1>
+      <p>
+        {{ isEditMode
+          ? 'Ažuriraj podatke o knjizi.'
+          : 'Unesi podatke za novu knjigu.' }}
+      </p>
+    </div>
+  </div>
+
+  @if (loading) {
+    <p class="status-message">Učitavanje knjige...</p>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="save()" class="book-form">
+      <div class="form-grid">
+        <div class="field">
+          <label for="title">Naslov *</label>
+          <input
+            id="title"
+            type="text"
+            formControlName="title"
+            placeholder="Naziv knjige"
+          />
+
+          @if (
+            form.controls.title.touched &&
+            form.controls.title.hasError('required')
+          ) {
+            <small class="validation-error">
+              Naslov je obavezan.
+            </small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="isbn">ISBN *</label>
+          <input
+            id="isbn"
+            type="text"
+            formControlName="isbn"
+            placeholder="ISBN"
+          />
+
+          @if (
+            form.controls.isbn.touched &&
+            form.controls.isbn.hasError('required')
+          ) {
+            <small class="validation-error">
+              ISBN je obavezan.
+            </small>
+          }
+
+          @if (
+            form.controls.isbn.touched &&
+            form.controls.isbn.hasError('maxlength')
+          ) {
+            <small class="validation-error">
+              ISBN može imati najviše 20 znakova.
+            </small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="publicationYear">Godina izdanja</label>
+          <input
+            id="publicationYear"
+            type="number"
+            min="1"
+            formControlName="publicationYear"
+          />
+
+          @if (
+            form.controls.publicationYear.touched &&
+            form.controls.publicationYear.hasError('min')
+          ) {
+            <small class="validation-error">
+              Godina mora biti veća od 0.
+            </small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="pageCount">Broj stranica</label>
+          <input
+            id="pageCount"
+            type="number"
+            min="1"
+            formControlName="pageCount"
+          />
+
+          @if (
+            form.controls.pageCount.touched &&
+            form.controls.pageCount.hasError('min')
+          ) {
+            <small class="validation-error">
+              Broj stranica mora biti veći od 0.
+            </small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="languageId">Jezik ID *</label>
+          <input
+            id="languageId"
+            type="number"
+            min="1"
+            formControlName="languageId"
+          />
+
+          @if (
+            form.controls.languageId.touched &&
+            (form.controls.languageId.hasError('required') ||
+              form.controls.languageId.hasError('min'))
+          ) {
+            <small class="validation-error">
+              Jezik je obavezan.
+            </small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="publisherId">Izdavač ID</label>
+          <input
+            id="publisherId"
+            type="number"
+            min="1"
+            formControlName="publisherId"
+          />
+
+          @if (
+            form.controls.publisherId.touched &&
+            form.controls.publisherId.hasError('min')
+          ) {
+            <small class="validation-error">
+              ID izdavača mora biti veći od 0.
+            </small>
+          }
+        </div>
+
+        <div class="field full-width">
+          <label for="description">Opis</label>
+          <textarea
+            id="description"
+            rows="5"
+            formControlName="description"
+            placeholder="Opis knjige"
+          ></textarea>
+        </div>
+
+        <div class="field full-width">
+          <label for="coverImage">Slika korice</label>
+          <input
+            id="coverImage"
+            type="text"
+            formControlName="coverImage"
+            placeholder="URL ili putanja do slike"
+          />
+        </div>
+
+        <div class="field">
+          <label for="authorIds">Autori ID</label>
+          <input
+            id="authorIds"
+            type="text"
+            formControlName="authorIds"
+            placeholder="npr. 1,2"
+          />
+          <small class="hint">
+            Više autora odvoji zarezom.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="genreIds">Žanrovi ID</label>
+          <input
+            id="genreIds"
+            type="text"
+            formControlName="genreIds"
+            placeholder="npr. 1,3"
+          />
+          <small class="hint">
+            Više žanrova odvoji zarezom.
+          </small>
+        </div>
+      </div>
+
+      @if (errorMessage) {
+        <div class="error-message">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <div class="actions">
+        <button
+          type="submit"
+          [disabled]="saving"
+        >
+          {{ saving ? 'Spremanje...' : 'Spremi' }}
+        </button>
+
+        <button
+          type="button"
+          class="secondary"
+          (click)="cancel()"
+          [disabled]="saving"
+        >
+          Odustani
+        </button>
+      </div>
+    </form>
+  }
+</section>
