@@ -3,24 +3,33 @@
 // Application layer
 public interface IAppDbContext
 {
-    
     DbSet<MarketUserEntity> Users { get; }
     DbSet<RefreshTokenEntity> RefreshTokens { get; }
 
-    public DbSet<Korisnik> Korisnici { get; set; }
-    public DbSet<Knjiga> Knjige { get; set; }
-    public DbSet<Autor> Autori { get; set; }
-    public DbSet<Primjerak> Primjerci { get; set; }
-    public DbSet<Posudba> Posudbe { get; set; }
-    public DbSet<Rezervacija> Rezervacije { get; set; }
-    public DbSet<Recenzija> Recenzije { get; set; }
-    public DbSet<Kazna> Kazne { get; set; }
-    public DbSet<ListaZelja> ListeZelja { get; set; }
-    public DbSet<KnjigaAutor> KnjigaAutori { get; set; }
-    public DbSet<KnjigaZanr> KnjigaZanrovi { get; set; }
-    public DbSet<Zanr> Zanrovi { get; set; }
-    public DbSet<SistemskePostavke> SistemskePostavke { get; set; }
-    public DbSet<UpravljanjeKorisnicima> UpravljanjeKorisnicima { get; set; }
+    DbSet<Knjiga> Knjige { get; set; }
+    DbSet<Autor> Autori { get; set; }
+    DbSet<Primjerak> Primjerci { get; set; }
+    DbSet<Izdavac> Izdavaci { get; set; }
+    DbSet<Zanr> Zanrovi { get; set; }
+    DbSet<Jezik> Jezici { get; set; }
+    DbSet<Grad> Gradovi { get; set; }
+
+    DbSet<KnjigaAutor> KnjigaAutori { get; set; }
+    DbSet<KnjigaZanr> KnjigaZanrovi { get; set; }
+
+    DbSet<Rezervacija> Rezervacije { get; set; }
+    DbSet<Posudba> Posudbe { get; set; }
+    DbSet<Produzenje> Produzenja { get; set; }
+
+    DbSet<Recenzija> Recenzije { get; set; }
+    DbSet<OcjenaRecenzije> OcjeneRecenzija { get; set; }
+
+    DbSet<Kazna> Kazne { get; set; }
+    DbSet<ListaZelja> ListeZelja { get; set; }
+    DbSet<Obavijest> Obavijesti { get; set; }
+
+    DbSet<SistemskePostavke> SistemskePostavke { get; set; }
+    DbSet<UpravljanjeKorisnicima> UpravljanjeKorisnicima { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

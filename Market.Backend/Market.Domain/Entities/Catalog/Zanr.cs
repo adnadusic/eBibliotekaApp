@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Market.Domain.Common;
 
 namespace Market.Domain.Entities.Catalog
 {
-    public class Zanr
+    public class Zanr : BaseEntity
     {
-        public int Id { get; set; }
         public string Naziv { get; set; }
         public string Opis { get; set; }
-        public DateTime? CreatedAt { get; set; }
 
         public ICollection<KnjigaZanr> Knjige { get; set; }
     }
