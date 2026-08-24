@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -20,6 +25,7 @@ export class BookForm implements OnInit {
   private readonly booksService = inject(BooksService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   bookId: number | null = null;
   isEditMode = false;
@@ -84,11 +90,13 @@ export class BookForm implements OnInit {
         });
 
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error(error);
         this.errorMessage = 'Failed to load book.';
         this.loading = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -124,11 +132,14 @@ export class BookForm implements OnInit {
           ...request,
         })
         .subscribe({
-          next: () => this.router.navigate(['/books']),
+          next: () => {
+            this.router.navigate(['/books']);
+          },
           error: (error) => {
             console.error(error);
             this.errorMessage = this.getErrorMessage(error);
             this.saving = false;
+            this.cdr.detectChanges();
           },
         });
 
@@ -136,11 +147,14 @@ export class BookForm implements OnInit {
     }
 
     this.booksService.create(request).subscribe({
-      next: () => this.router.navigate(['/books']),
+      next: () => {
+        this.router.navigate(['/books']);
+      },
       error: (error) => {
         console.error(error);
         this.errorMessage = this.getErrorMessage(error);
         this.saving = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -171,6 +185,10 @@ export class BookForm implements OnInit {
 
     if (error?.status === 401) {
       return 'Potrebna je prijava korisnika.';
+    }
+
+    if (error?.status === 404) {
+      return 'Traženi podatak nije pronađen.';
     }
 
     return 'Došlo je do greške prilikom spremanja knjige.';

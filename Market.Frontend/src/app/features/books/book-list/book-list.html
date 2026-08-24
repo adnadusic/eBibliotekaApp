@@ -115,6 +115,13 @@
               <td>{{ book.averageRating ?? 0 }}</td>
 
               <td class="row-actions">
+<button
+  type="button"
+  class="details-button"
+  (click)="viewBook(book.id)"
+>
+  Detalji
+</button>
                 <button
                   type="button"
                   class="edit-button"

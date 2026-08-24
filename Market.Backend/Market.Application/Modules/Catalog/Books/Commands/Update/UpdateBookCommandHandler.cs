@@ -44,7 +44,8 @@ public sealed class UpdateBookCommandHandler(IAppDbContext ctx)
                 .ToListAsync(ct);
 
             if (existingAuthorIds.Count != authorIds.Count)
-                throw new MarketNotFoundException("One or more authors were not found.");
+                throw new MarketNotFoundException(
+                    "One or more authors were not found.");
         }
 
         var genreIds = request.GenreIds
@@ -59,7 +60,8 @@ public sealed class UpdateBookCommandHandler(IAppDbContext ctx)
                 .ToListAsync(ct);
 
             if (existingGenreIds.Count != genreIds.Count)
-                throw new MarketNotFoundException("One or more genres were not found.");
+                throw new MarketNotFoundException(
+                    "One or more genres were not found.");
         }
 
         book.Naslov = request.Title.Trim();
@@ -68,8 +70,8 @@ public sealed class UpdateBookCommandHandler(IAppDbContext ctx)
         book.BrojStranica = request.PageCount;
         book.JezikId = request.LanguageId;
         book.PublisherId = request.PublisherId;
-        book.Opis = request.Description?.Trim();
-        book.SlikaKorice = request.CoverImage?.Trim();
+        book.Opis = request.Description?.Trim() ?? string.Empty;
+        book.SlikaKorice = request.CoverImage?.Trim() ?? string.Empty;
 
         book.Autori.Clear();
 

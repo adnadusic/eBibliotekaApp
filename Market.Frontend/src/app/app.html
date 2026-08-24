@@ -1,1 +1,13 @@
+<header class="app-header">
+  <a class="brand" routerLink="/books">eBiblioteka</a>
+
+  <nav>
+    @if (authService.isLoggedIn()) {
+      <button type="button" (click)="logout()">Odjava</button>
+    } @else {
+      <a routerLink="/login">Prijava</a>
+    }
+  </nav>
+</header>
+
 <router-outlet />

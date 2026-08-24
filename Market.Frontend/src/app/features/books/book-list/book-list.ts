@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -18,6 +23,7 @@ export class BookList implements OnInit {
   private readonly booksService = inject(BooksService);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   books: BookListItem[] = [];
 
@@ -65,11 +71,13 @@ export class BookList implements OnInit {
           this.books = result.items;
           this.total = result.total;
           this.loading = false;
+          this.cdr.detectChanges();
         },
         error: (error) => {
           console.error(error);
           this.errorMessage = 'Failed to load books.';
           this.loading = false;
+          this.cdr.detectChanges();
         },
       });
   }
@@ -96,6 +104,10 @@ export class BookList implements OnInit {
     this.router.navigate(['/books/new']);
   }
 
+viewBook(id: number): void {
+  this.router.navigate(['/books', id]);
+}
+
   editBook(id: number): void {
     this.router.navigate(['/books', id, 'edit']);
   }
@@ -110,16 +122,21 @@ export class BookList implements OnInit {
     }
 
     this.booksService.delete(book.id).subscribe({
-      next: () => this.loadBooks(),
+      next: () => {
+        this.loadBooks();
+      },
       error: (error) => {
         console.error(error);
 
         if (error?.status === 401) {
-          this.errorMessage = 'Potrebna je prijava korisnika za brisanje knjige.';
+          this.errorMessage =
+            'Potrebna je prijava korisnika za brisanje knjige.';
+          this.cdr.detectChanges();
           return;
         }
 
         this.errorMessage = 'Brisanje knjige nije uspjelo.';
+        this.cdr.detectChanges();
       },
     });
   }
