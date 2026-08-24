@@ -1,0 +1,132 @@
+<section class="details-page">
+  @if (loading) {
+    <p class="status-message">Učitavanje detalja knjige...</p>
+  }
+
+  @if (errorMessage) {
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <button
+      type="button"
+      class="secondary-button"
+      (click)="backToList()"
+    >
+      Nazad na knjige
+    </button>
+  }
+
+  @if (!loading && !errorMessage && book) {
+    <div class="page-header">
+      <div>
+        <h1>{{ book.title }}</h1>
+        <p>Detalji knjige</p>
+      </div>
+
+      <div class="header-actions">
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="backToList()"
+        >
+          Nazad
+        </button>
+
+        <button
+          type="button"
+          class="primary-button"
+          (click)="editBook()"
+        >
+          Uredi
+        </button>
+      </div>
+    </div>
+
+    <div class="details-card">
+      <div class="detail-item">
+        <span class="label">ID</span>
+        <span>{{ book.id }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">Naslov</span>
+        <span>{{ book.title }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">ISBN</span>
+        <span>{{ book.isbn }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">Godina izdanja</span>
+        <span>{{ book.publicationYear ?? '—' }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">Broj stranica</span>
+        <span>{{ book.pageCount ?? '—' }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">Jezik ID</span>
+        <span>{{ book.languageId }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">Izdavač ID</span>
+        <span>{{ book.publisherId ?? '—' }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">Autor ID</span>
+        <span>
+          {{ book.authorIds.length ? book.authorIds.join(', ') : '—' }}
+        </span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">Žanr ID</span>
+        <span>
+          {{ book.genreIds.length ? book.genreIds.join(', ') : '—' }}
+        </span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">Ukupno primjeraka</span>
+        <span>{{ book.totalCopies ?? 0 }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">Dostupno primjeraka</span>
+        <span>{{ book.availableCopies ?? 0 }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">Prosječna ocjena</span>
+        <span>{{ book.averageRating ?? 0 }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">Broj ocjena</span>
+        <span>{{ book.ratingCount ?? 0 }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">Broj pregleda</span>
+        <span>{{ book.viewCount ?? 0 }}</span>
+      </div>
+
+      <div class="detail-item full-width">
+        <span class="label">Opis</span>
+        <span>{{ book.description || '—' }}</span>
+      </div>
+
+      <div class="detail-item full-width">
+        <span class="label">Slika korice</span>
+        <span>{{ book.coverImage || '—' }}</span>
+      </div>
+    </div>
+  }
+</section>

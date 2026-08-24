@@ -1,0 +1,176 @@
+<section class="books-page">
+  <div class="page-header">
+    <div>
+      <h1>Knjige</h1>
+      <p>Pregled i pretraga knjiga u e-Biblioteci.</p>
+    </div>
+
+    <button type="button" class="primary-action" (click)="createBook()">
+      Dodaj knjigu
+    </button>
+  </div>
+
+  <form
+    class="filters"
+    [formGroup]="filterForm"
+    (ngSubmit)="applyFilters()"
+  >
+    <div class="filter-field">
+      <label for="title">Naslov</label>
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        placeholder="Pretraži po naslovu"
+      />
+    </div>
+
+    <div class="filter-field">
+      <label for="isbn">ISBN</label>
+      <input
+        id="isbn"
+        type="text"
+        formControlName="isbn"
+        placeholder="Pretraži po ISBN-u"
+      />
+    </div>
+
+    <div class="filter-field">
+      <label for="authorId">Autor ID</label>
+      <input
+        id="authorId"
+        type="number"
+        min="1"
+        formControlName="authorId"
+        placeholder="npr. 1"
+      />
+    </div>
+
+    <div class="filter-field">
+      <label for="genreId">Žanr ID</label>
+      <input
+        id="genreId"
+        type="number"
+        min="1"
+        formControlName="genreId"
+        placeholder="npr. 1"
+      />
+    </div>
+
+    <div class="filter-field">
+      <label for="languageId">Jezik ID</label>
+      <input
+        id="languageId"
+        type="number"
+        min="1"
+        formControlName="languageId"
+        placeholder="npr. 1"
+      />
+    </div>
+
+    <div class="filter-actions">
+      <button type="submit">Filtriraj</button>
+
+      <button type="button" class="secondary" (click)="resetFilters()">
+        Resetuj
+      </button>
+    </div>
+  </form>
+
+  @if (loading) {
+    <p class="status-message">Učitavanje knjiga...</p>
+  }
+
+  @if (errorMessage) {
+    <p class="error-message">{{ errorMessage }}</p>
+  }
+
+  @if (!loading && !errorMessage) {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Naslov</th>
+            <th>ISBN</th>
+            <th>Godina</th>
+            <th>Broj stranica</th>
+            <th>Jezik</th>
+            <th>Dostupno</th>
+            <th>Ocjena</th>
+            <th>Akcije</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (book of books; track book.id) {
+            <tr>
+              <td>{{ book.id }}</td>
+              <td>{{ book.title }}</td>
+              <td>{{ book.isbn }}</td>
+              <td>{{ book.publicationYear ?? '—' }}</td>
+              <td>{{ book.pageCount ?? '—' }}</td>
+              <td>{{ book.languageId }}</td>
+              <td>{{ book.availableCopies ?? 0 }}</td>
+              <td>{{ book.averageRating ?? 0 }}</td>
+
+              <td class="row-actions">
+<button
+  type="button"
+  class="details-button"
+  (click)="viewBook(book.id)"
+>
+  Detalji
+</button>
+                <button
+                  type="button"
+                  class="edit-button"
+                  (click)="editBook(book.id)"
+                >
+                  Uredi
+                </button>
+
+                <button
+                  type="button"
+                  class="delete-button"
+                  (click)="deleteBook(book)"
+                >
+                  Obriši
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="9" class="empty-state">
+                Nema pronađenih knjiga.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <button
+        type="button"
+        (click)="previousPage()"
+        [disabled]="page <= 1"
+      >
+        Prethodna
+      </button>
+
+      <span>
+        Stranica {{ page }} / {{ totalPages }}
+        · ukupno {{ total }} knjiga
+      </span>
+
+      <button
+        type="button"
+        (click)="nextPage()"
+        [disabled]="page >= totalPages"
+      >
+        Sljedeća
+      </button>
+    </div>
+  }
+</section>

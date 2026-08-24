@@ -1,0 +1,120 @@
+.book-form-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px;
+  font-family: Arial, sans-serif;
+}
+
+.page-header {
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 32px;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+  }
+}
+
+.book-form {
+  padding: 24px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-weight: 600;
+  }
+
+  input,
+  textarea {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font: inherit;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.validation-error {
+  color: #b00020;
+  font-size: 13px;
+}
+
+.hint {
+  color: #777;
+  font-size: 13px;
+}
+
+.error-message {
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 6px;
+  background: #ffe7e7;
+  color: #a40000;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+
+  button {
+    padding: 10px 20px;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .secondary {
+    border: 1px solid #ccc;
+    background: white;
+  }
+}
+
+.status-message {
+  padding: 20px;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .book-form-page {
+    padding: 16px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+}
