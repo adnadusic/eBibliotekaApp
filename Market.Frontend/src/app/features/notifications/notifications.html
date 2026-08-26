@@ -1,0 +1,82 @@
+<section class="notifications-page">
+  <div class="page-header">
+    <div>
+      <h1>Notifikacije</h1>
+
+      <p>
+        Nepročitane: {{ unreadCount }}
+      </p>
+    </div>
+  </div>
+
+  @if (loading) {
+    <p class="status-message">
+      Učitavanje notifikacija...
+    </p>
+  }
+
+  @if (errorMessage) {
+    <p class="error-message">
+      {{ errorMessage }}
+    </p>
+  }
+
+  @if (!loading && !errorMessage) {
+    <div class="notifications-list">
+      @for (notification of notifications; track notification.id) {
+        <article
+          class="notification-card"
+          [class.unread]="!notification.isRead"
+        >
+          <div class="notification-content">
+            <div class="notification-header">
+              <h2>{{ notification.title }}</h2>
+
+              @if (notification.isRead) {
+                <span class="status read">
+                  Pročitano
+                </span>
+              } @else {
+                <span class="status unread-status">
+                  Nepročitano
+                </span>
+              }
+            </div>
+
+            <p class="notification-message">
+              {{ notification.message }}
+            </p>
+
+            <p class="notification-date">
+              Poslano:
+              {{ notification.sentAt }}
+            </p>
+
+            @if (notification.readAt) {
+              <p class="notification-date">
+                Pročitano:
+                {{ notification.readAt }}
+              </p>
+            }
+          </div>
+
+          <button
+            type="button"
+            class="read-status-button"
+            (click)="toggleReadStatus(notification)"
+          >
+            @if (notification.isRead) {
+              Označi kao nepročitano
+            } @else {
+              Označi kao pročitano
+            }
+          </button>
+        </article>
+      } @empty {
+        <p class="empty-state">
+          Trenutno nema notifikacija.
+        </p>
+      }
+    </div>
+  }
+</section>

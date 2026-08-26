@@ -6,6 +6,7 @@ import { BookDetailsPage } from './features/books/book-details/book-details';
 import { BookForm } from './features/books/book-form/book-form';
 import { BookList } from './features/books/book-list/book-list';
 import { Landing } from './features/landing/landing';
+import { NotificationsPage } from './features/notifications/notifications';
 
 export const routes: Routes = [
   {
@@ -33,6 +34,11 @@ export const routes: Routes = [
   {
     path: 'books/:id',
     component: BookDetailsPage,
+  },
+  {
+    path: 'notifications',
+    component: NotificationsPage,
+    canActivate: [authGuard],
   },
   {
     path: '**',
