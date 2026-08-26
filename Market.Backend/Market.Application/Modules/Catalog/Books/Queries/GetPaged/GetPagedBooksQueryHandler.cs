@@ -44,8 +44,32 @@ public sealed class GetPagedBooksQueryHandler(IAppDbContext ctx)
                 x.JezikId == request.LanguageId.Value);
         }
 
+        var sortBy = request.SortBy.Trim().ToLowerInvariant();
+
+        var descending = request.SortDirection.Equals(
+            "desc",
+            StringComparison.OrdinalIgnoreCase);
+
+        query = sortBy switch
+        {
+            "isbn" => descending
+                ? query.OrderByDescending(x => x.Isbn).ThenBy(x => x.Id)
+                : query.OrderBy(x => x.Isbn).ThenBy(x => x.Id),
+
+            "publicationyear" => descending
+                ? query.OrderByDescending(x => x.GodinaIzdanja).ThenBy(x => x.Id)
+                : query.OrderBy(x => x.GodinaIzdanja).ThenBy(x => x.Id),
+
+            "pagecount" => descending
+                ? query.OrderByDescending(x => x.BrojStranica).ThenBy(x => x.Id)
+                : query.OrderBy(x => x.BrojStranica).ThenBy(x => x.Id),
+
+            _ => descending
+                ? query.OrderByDescending(x => x.Naslov).ThenBy(x => x.Id)
+                : query.OrderBy(x => x.Naslov).ThenBy(x => x.Id)
+        };
+
         var projectedQuery = query
-            .OrderBy(x => x.Naslov)
             .Select(x => new GetPagedBooksItemDto
             {
                 Id = x.Id,

@@ -30,4 +30,14 @@ public sealed class GetPagedBooksQuery
     /// Filters books by language.
     /// </summary>
     public int? LanguageId { get; init; }
+
+    /// <summary>
+    /// Column used for sorting books.
+    /// </summary>
+    public string SortBy { get; init; } = "title";
+
+    /// <summary>
+    /// Sort direction: asc or desc.
+    /// </summary>
+    public string SortDirection { get; init; } = "asc";
 }

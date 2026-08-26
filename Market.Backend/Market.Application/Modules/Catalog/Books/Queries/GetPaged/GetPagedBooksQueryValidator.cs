@@ -34,5 +34,19 @@ public sealed class GetPagedBooksQueryValidator : AbstractValidator<GetPagedBook
             .GreaterThan(0)
             .WithMessage("Language identifier must be greater than 0.")
             .When(x => x.LanguageId.HasValue);
+
+        RuleFor(x => x.SortBy)
+            .Must(x =>
+                x.Equals("title", StringComparison.OrdinalIgnoreCase) ||
+                x.Equals("isbn", StringComparison.OrdinalIgnoreCase) ||
+                x.Equals("publicationYear", StringComparison.OrdinalIgnoreCase) ||
+                x.Equals("pageCount", StringComparison.OrdinalIgnoreCase))
+            .WithMessage("SortBy must be title, isbn, publicationYear or pageCount.");
+
+        RuleFor(x => x.SortDirection)
+            .Must(x =>
+                x.Equals("asc", StringComparison.OrdinalIgnoreCase) ||
+                x.Equals("desc", StringComparison.OrdinalIgnoreCase))
+            .WithMessage("SortDirection must be asc or desc.");
     }
 }
