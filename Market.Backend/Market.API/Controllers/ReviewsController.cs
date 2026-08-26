@@ -1,4 +1,5 @@
 ﻿using Market.Application.Modules.Catalog.Reviews.Commands.Create;
+using Market.Application.Modules.Catalog.Reviews.Commands.React;
 using Market.Application.Modules.Catalog.Reviews.Queries.GetByBook;
 
 [ApiController]
@@ -30,5 +31,16 @@ public sealed class ReviewsController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(command, ct);
 
         return Ok(result);
+    }
+
+    [HttpPost("react")]
+    [Authorize]
+    public async Task<IActionResult> React(
+        [FromBody] ReactToReviewCommand command,
+        CancellationToken ct)
+    {
+        await mediator.Send(command, ct);
+
+        return NoContent();
     }
 }

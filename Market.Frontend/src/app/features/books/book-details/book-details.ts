@@ -121,8 +121,10 @@ export class BookDetailsPage implements OnInit {
       },
       error: (error) => {
         console.error(error);
+
         this.reviewErrorMessage =
           'Učitavanje recenzija nije uspjelo.';
+
         this.reviewsLoading = false;
         this.cdr.detectChanges();
       },
@@ -164,6 +166,7 @@ export class BookDetailsPage implements OnInit {
 
           this.reviewSuccessMessage =
             'Recenzija je uspješno dodana.';
+
           this.submittingReview = false;
 
           this.loadReviews(bookId);
@@ -186,6 +189,43 @@ export class BookDetailsPage implements OnInit {
           }
 
           this.submittingReview = false;
+          this.cdr.detectChanges();
+        },
+      });
+  }
+
+  reactToReview(
+    reviewId: number,
+    reactionType: 1 | 2
+  ): void {
+    if (!this.book) {
+      return;
+    }
+
+    const bookId = this.book.id;
+
+    this.reviewErrorMessage = '';
+
+    this.reviewsService
+      .react({
+        reviewId,
+        reactionType,
+      })
+      .subscribe({
+        next: () => {
+          this.loadReviews(bookId);
+        },
+        error: (error) => {
+          console.error(error);
+
+          if (error?.status === 401) {
+            this.reviewErrorMessage =
+              'Morate biti prijavljeni da biste reagovali na recenziju.';
+          } else {
+            this.reviewErrorMessage =
+              'Reakcija na recenziju nije uspjela.';
+          }
+
           this.cdr.detectChanges();
         },
       });
