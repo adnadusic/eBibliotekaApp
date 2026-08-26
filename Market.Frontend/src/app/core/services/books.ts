@@ -76,6 +76,8 @@ export interface BookFilters {
   authorId?: number | null;
   genreId?: number | null;
   languageId?: number | null;
+  sortBy?: 'title' | 'isbn' | 'publicationYear' | 'pageCount';
+  sortDirection?: 'asc' | 'desc';
 }
 
 @Injectable({
@@ -109,6 +111,14 @@ export class BooksService {
 
     if (filters.languageId) {
       params = params.set('languageId', filters.languageId);
+    }
+
+    if (filters.sortBy) {
+      params = params.set('sortBy', filters.sortBy);
+    }
+
+    if (filters.sortDirection) {
+      params = params.set('sortDirection', filters.sortDirection);
     }
 
     return this.http.get<PagedBooksResult>(this.apiUrl, { params });

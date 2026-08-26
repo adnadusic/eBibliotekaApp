@@ -188,3 +188,15 @@ table {
 .primary-action:hover {
   opacity: 0.85;
 }
+
+.sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+}

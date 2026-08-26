@@ -13,6 +13,14 @@ import {
   BooksService,
 } from '../../../core/services/books';
 
+type BookSortColumn =
+  | 'title'
+  | 'isbn'
+  | 'publicationYear'
+  | 'pageCount';
+
+type SortDirection = 'asc' | 'desc';
+
 @Component({
   selector: 'app-book-list',
   imports: [CommonModule, ReactiveFormsModule],
@@ -30,6 +38,9 @@ export class BookList implements OnInit {
   total = 0;
   page = 1;
   pageSize = 10;
+
+  sortBy: BookSortColumn = 'title';
+  sortDirection: SortDirection = 'asc';
 
   loading = false;
   errorMessage = '';
@@ -65,6 +76,8 @@ export class BookList implements OnInit {
         authorId: filters.authorId,
         genreId: filters.genreId,
         languageId: filters.languageId,
+        sortBy: this.sortBy,
+        sortDirection: this.sortDirection,
       })
       .subscribe({
         next: (result) => {
@@ -100,13 +113,34 @@ export class BookList implements OnInit {
     this.loadBooks();
   }
 
+  sortByColumn(column: BookSortColumn): void {
+    if (this.sortBy === column) {
+      this.sortDirection =
+        this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortBy = column;
+      this.sortDirection = 'asc';
+    }
+
+    this.page = 1;
+    this.loadBooks();
+  }
+
+  getSortIndicator(column: BookSortColumn): string {
+    if (this.sortBy !== column) {
+      return '';
+    }
+
+    return this.sortDirection === 'asc' ? '▲' : '▼';
+  }
+
   createBook(): void {
     this.router.navigate(['/books/new']);
   }
 
-viewBook(id: number): void {
-  this.router.navigate(['/books', id]);
-}
+  viewBook(id: number): void {
+    this.router.navigate(['/books', id]);
+  }
 
   editBook(id: number): void {
     this.router.navigate(['/books', id, 'edit']);

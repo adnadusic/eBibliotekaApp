@@ -91,10 +91,51 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>Naslov</th>
-            <th>ISBN</th>
-            <th>Godina</th>
-            <th>Broj stranica</th>
+
+            <th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortByColumn('title')"
+              >
+                Naslov
+                <span>{{ getSortIndicator('title') }}</span>
+              </button>
+            </th>
+
+            <th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortByColumn('isbn')"
+              >
+                ISBN
+                <span>{{ getSortIndicator('isbn') }}</span>
+              </button>
+            </th>
+
+            <th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortByColumn('publicationYear')"
+              >
+                Godina
+                <span>{{ getSortIndicator('publicationYear') }}</span>
+              </button>
+            </th>
+
+            <th>
+              <button
+                type="button"
+                class="sort-button"
+                (click)="sortByColumn('pageCount')"
+              >
+                Broj stranica
+                <span>{{ getSortIndicator('pageCount') }}</span>
+              </button>
+            </th>
+
             <th>Jezik</th>
             <th>Dostupno</th>
             <th>Ocjena</th>
@@ -115,13 +156,14 @@
               <td>{{ book.averageRating ?? 0 }}</td>
 
               <td class="row-actions">
-<button
-  type="button"
-  class="details-button"
-  (click)="viewBook(book.id)"
->
-  Detalji
-</button>
+                <button
+                  type="button"
+                  class="details-button"
+                  (click)="viewBook(book.id)"
+                >
+                  Detalji
+                </button>
+
                 <button
                   type="button"
                   class="edit-button"

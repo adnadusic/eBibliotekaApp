@@ -19,6 +19,8 @@ public sealed class BooksController(IMediator mediator) : ControllerBase
         [FromQuery] int? authorId = null,
         [FromQuery] int? genreId = null,
         [FromQuery] int? languageId = null,
+        [FromQuery] string sortBy = "title",
+        [FromQuery] string sortDirection = "asc",
         CancellationToken ct = default)
     {
         var query = new GetPagedBooksQuery
@@ -32,7 +34,9 @@ public sealed class BooksController(IMediator mediator) : ControllerBase
             Isbn = isbn,
             AuthorId = authorId,
             GenreId = genreId,
-            LanguageId = languageId
+            LanguageId = languageId,
+            SortBy = sortBy,
+            SortDirection = sortDirection
         };
 
         return Ok(await mediator.Send(query, ct));
