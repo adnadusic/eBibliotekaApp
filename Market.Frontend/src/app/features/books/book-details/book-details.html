@@ -228,6 +228,7 @@
               <div class="review-header">
                 <div>
                   <strong>{{ review.userName }}</strong>
+
                   <span class="review-date">
                     {{ review.date | date:'dd.MM.yyyy. HH:mm' }}
                   </span>
@@ -243,8 +244,23 @@
               <p>{{ review.comment }}</p>
 
               <div class="review-reactions">
-                <span>Korisno: {{ review.helpfulCount }}</span>
-                <span>Nije korisno: {{ review.unhelpfulCount }}</span>
+                <button
+                  type="button"
+                  class="reaction-button"
+                  (click)="reactToReview(review.id, 1)"
+                >
+                  Korisno
+                  ({{ review.helpfulCount }})
+                </button>
+
+                <button
+                  type="button"
+                  class="reaction-button"
+                  (click)="reactToReview(review.id, 2)"
+                >
+                  Nije korisno
+                  ({{ review.unhelpfulCount }})
+                </button>
               </div>
             </article>
           } @empty {

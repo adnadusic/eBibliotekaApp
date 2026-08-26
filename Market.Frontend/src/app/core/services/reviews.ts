@@ -31,6 +31,11 @@ export interface CreateReviewResponse {
   date: string;
 }
 
+export interface ReactToReviewRequest {
+  reviewId: number;
+  reactionType: 1 | 2;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -50,6 +55,13 @@ export class ReviewsService {
   ): Observable<CreateReviewResponse> {
     return this.http.post<CreateReviewResponse>(
       this.apiUrl,
+      request
+    );
+  }
+
+  react(request: ReactToReviewRequest): Observable<void> {
+    return this.http.post<void>(
+      `${this.apiUrl}/react`,
       request
     );
   }
