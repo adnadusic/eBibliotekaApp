@@ -128,5 +128,132 @@
         <span>{{ book.coverImage || '—' }}</span>
       </div>
     </div>
+
+    <section class="reviews-section">
+      <h2>Ocjene i recenzije</h2>
+
+      <form
+        class="review-form"
+        [formGroup]="reviewForm"
+        (ngSubmit)="submitReview()"
+      >
+        <h3>Dodaj recenziju</h3>
+
+        <div class="review-field">
+          <label for="rating">Ocjena</label>
+
+          <select
+            id="rating"
+            formControlName="rating"
+          >
+            <option [ngValue]="5">5 - Odlično</option>
+            <option [ngValue]="4">4 - Vrlo dobro</option>
+            <option [ngValue]="3">3 - Dobro</option>
+            <option [ngValue]="2">2 - Dovoljno</option>
+            <option [ngValue]="1">1 - Loše</option>
+          </select>
+        </div>
+
+        <div class="review-field">
+          <label for="reviewTitle">Naslov recenzije</label>
+
+          <input
+            id="reviewTitle"
+            type="text"
+            formControlName="title"
+            placeholder="Unesite naslov recenzije"
+          />
+
+          @if (
+            reviewForm.controls.title.touched &&
+            reviewForm.controls.title.invalid
+          ) {
+            <span class="validation-message">
+              Naslov recenzije je obavezan.
+            </span>
+          }
+        </div>
+
+        <div class="review-field">
+          <label for="reviewComment">Komentar</label>
+
+          <textarea
+            id="reviewComment"
+            rows="5"
+            formControlName="comment"
+            placeholder="Napišite svoje mišljenje o knjizi"
+          ></textarea>
+
+          @if (
+            reviewForm.controls.comment.touched &&
+            reviewForm.controls.comment.invalid
+          ) {
+            <span class="validation-message">
+              Komentar je obavezan.
+            </span>
+          }
+        </div>
+
+        <button
+          type="submit"
+          class="primary-button"
+          [disabled]="submittingReview"
+        >
+          {{ submittingReview ? 'Spremanje...' : 'Objavi recenziju' }}
+        </button>
+      </form>
+
+      @if (reviewSuccessMessage) {
+        <div class="success-message">
+          {{ reviewSuccessMessage }}
+        </div>
+      }
+
+      @if (reviewErrorMessage) {
+        <div class="error-message">
+          {{ reviewErrorMessage }}
+        </div>
+      }
+
+      <div class="reviews-list">
+        <h3>Recenzije korisnika</h3>
+
+        @if (reviewsLoading) {
+          <p class="status-message">Učitavanje recenzija...</p>
+        }
+
+        @if (!reviewsLoading) {
+          @for (review of reviews; track review.id) {
+            <article class="review-card">
+              <div class="review-header">
+                <div>
+                  <strong>{{ review.userName }}</strong>
+                  <span class="review-date">
+                    {{ review.date | date:'dd.MM.yyyy. HH:mm' }}
+                  </span>
+                </div>
+
+                <span class="review-rating">
+                  Ocjena: {{ review.rating }} / 5
+                </span>
+              </div>
+
+              <h4>{{ review.title }}</h4>
+
+              <p>{{ review.comment }}</p>
+
+              <div class="review-reactions">
+                <span>Korisno: {{ review.helpfulCount }}</span>
+                <span>Nije korisno: {{ review.unhelpfulCount }}</span>
+              </div>
+            </article>
+          } @empty {
+            <p class="empty-reviews">
+              Ova knjiga još nema recenzija.
+            </p>
+          }
+        }
+      </div>
+    </section>
   }
 </section>
