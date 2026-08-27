@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './core/guards/auth.guard';
 import { Login } from './features/auth/login/login';
+import { AuditTrailPage } from './features/audit-trail/audit-trail';
 import { BookDetailsPage } from './features/books/book-details/book-details';
 import { BookForm } from './features/books/book-form/book-form';
 import { BookList } from './features/books/book-list/book-list';
@@ -38,6 +39,11 @@ export const routes: Routes = [
   {
     path: 'notifications',
     component: NotificationsPage,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'audit-trail',
+    component: AuditTrailPage,
     canActivate: [authGuard],
   },
   {

@@ -1,0 +1,171 @@
+<section class="audit-trail-page">
+  <div class="page-header">
+    <div>
+      <h1>Audit Trail</h1>
+
+      <p>
+        Pregled promjena u sistemu.
+      </p>
+    </div>
+  </div>
+
+  <div class="audit-filters">
+    <div class="filter-group">
+      <label for="entityFilter">
+        Entitet
+      </label>
+
+      <select
+        id="entityFilter"
+        (change)="onEntityFilterChange($event)"
+      >
+        <option value="">
+          Svi entiteti
+        </option>
+
+        <option value="Knjiga">
+          Knjiga
+        </option>
+
+        <option value="Recenzija">
+          Recenzija
+        </option>
+
+        <option value="OcjenaRecenzije">
+          Ocjena recenzije
+        </option>
+
+        <option value="Obavijest">
+          Obavijest
+        </option>
+
+        <option value="PostavkaObavijesti">
+          Postavka obavijesti
+        </option>
+
+        <option value="Rezervacija">
+          Rezervacija
+        </option>
+
+        <option value="Posudba">
+          Posudba
+        </option>
+
+        <option value="Kazna">
+          Kazna
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="actionFilter">
+        Akcija
+      </label>
+
+      <select
+        id="actionFilter"
+        (change)="onActionFilterChange($event)"
+      >
+        <option value="">
+          Sve akcije
+        </option>
+
+        <option value="Create">
+          Kreiranje
+        </option>
+
+        <option value="Update">
+          Izmjena
+        </option>
+
+        <option value="Delete">
+          Brisanje
+        </option>
+      </select>
+    </div>
+  </div>
+
+  @if (loading) {
+    <p class="status-message">
+      Učitavanje Audit Trail zapisa...
+    </p>
+  }
+
+  @if (errorMessage) {
+    <p class="error-message">
+      {{ errorMessage }}
+    </p>
+  }
+
+  @if (!loading && !errorMessage) {
+    <div class="audit-list">
+      @for (log of auditLogs; track log.id) {
+        <article class="audit-card">
+          <div class="audit-card-header">
+            <div>
+              <h2>
+                {{ log.entityName }}
+              </h2>
+
+              <p>
+                ID entiteta:
+                {{ log.entityId ?? '-' }}
+              </p>
+            </div>
+
+            <span class="action-badge">
+              @if (log.action === 'Create') {
+                Kreiranje
+              } @else if (log.action === 'Update') {
+                Izmjena
+              } @else if (log.action === 'Delete') {
+                Brisanje
+              } @else {
+                {{ log.action }}
+              }
+            </span>
+          </div>
+
+          <div class="audit-meta">
+            <p>
+              <strong>Korisnik:</strong>
+              {{ log.userEmail ?? 'Sistem' }}
+            </p>
+
+            <p>
+              <strong>User ID:</strong>
+              {{ log.userId ?? '-' }}
+            </p>
+
+            <p>
+              <strong>Vrijeme:</strong>
+              {{ log.changedAtUtc }}
+            </p>
+          </div>
+
+          <div class="audit-values">
+            <div class="audit-values-column">
+              <h3>
+                Stare vrijednosti
+              </h3>
+
+              <pre>{{ formatValues(log.oldValues) }}</pre>
+            </div>
+
+            <div class="audit-values-column">
+              <h3>
+                Nove vrijednosti
+              </h3>
+
+              <pre>{{ formatValues(log.newValues) }}</pre>
+            </div>
+          </div>
+        </article>
+      } @empty {
+        <p class="empty-state">
+          Nema Audit Trail zapisa za odabrane filtere.
+        </p>
+      }
+    </div>
+  }
+</section>
