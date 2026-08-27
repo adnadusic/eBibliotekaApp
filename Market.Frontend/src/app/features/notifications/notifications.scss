@@ -95,3 +95,88 @@
 .error-message {
   color: #b00020;
 }
+
+.priority-settings {
+  margin-bottom: 24px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 16px;
+  }
+}
+
+.priority-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.priority-button {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: white;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f3f3f3;
+  }
+
+  &.active {
+    border-width: 2px;
+    font-weight: 600;
+  }
+
+  span {
+    font-size: 12px;
+  }
+}
+
+.notification-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-weight: 600;
+  }
+
+  select {
+    min-width: 180px;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: white;
+  }
+}
+
+.notification-card.priority {
+  border-width: 2px;
+}
+
+.priority-badge {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 600;
+}

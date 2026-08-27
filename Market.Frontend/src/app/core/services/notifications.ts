@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface NotificationItem {
@@ -19,6 +19,11 @@ export interface SetNotificationReadStatusRequest {
   isRead: boolean;
 }
 
+export interface NotificationSettingItem {
+  type: number;
+  isPriority: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -28,9 +33,42 @@ export class NotificationsService {
   private readonly apiUrl =
     'https://localhost:7260/api/notifications';
 
-  getMyNotifications(): Observable<NotificationItem[]> {
+  getMyNotifications(
+    type?: number,
+    isRead?: boolean
+  ): Observable<NotificationItem[]> {
+    let params = new HttpParams();
+
+    if (type !== undefined) {
+      params = params.set('type', type.toString());
+    }
+
+    if (isRead !== undefined) {
+      params = params.set('isRead', isRead.toString());
+    }
+
     return this.http.get<NotificationItem[]>(
-      this.apiUrl
+      this.apiUrl,
+      { params }
+    );
+  }
+
+  getMyNotificationSettings(): Observable<NotificationSettingItem[]> {
+    return this.http.get<NotificationSettingItem[]>(
+      `${this.apiUrl}/settings`
+    );
+  }
+
+  setPriority(
+    type: number,
+    isPriority: boolean
+  ): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/priority`,
+      {
+        type,
+        isPriority,
+      }
     );
   }
 

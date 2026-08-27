@@ -28,6 +28,7 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<Kazna> Kazne { get; set; } = null!;
     public DbSet<ListaZelja> ListeZelja { get; set; } = null!;
     public DbSet<Obavijest> Obavijesti { get; set; } = null!;
+    public DbSet<PostavkaObavijesti> PostavkeObavijesti { get; set; } = null!;
 
     public DbSet<SistemskePostavke> SistemskePostavke { get; set; } = null!;
     public DbSet<UpravljanjeKorisnicima> UpravljanjeKorisnicima { get; set; } = null!;

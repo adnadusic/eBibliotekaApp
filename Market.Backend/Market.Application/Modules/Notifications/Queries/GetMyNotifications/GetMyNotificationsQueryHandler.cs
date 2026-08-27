@@ -19,11 +19,25 @@ public sealed class GetMyNotificationsQueryHandler(
 
         var userId = currentUser.UserId.Value;
 
-        return await ctx.Obavijesti
+        var query = ctx.Obavijesti
             .AsNoTracking()
             .Where(x =>
                 x.UserId == userId &&
-                !x.IsDeleted)
+                !x.IsDeleted);
+
+        if (request.Type.HasValue)
+        {
+            query = query.Where(x =>
+                x.Tip == request.Type.Value);
+        }
+
+        if (request.IsRead.HasValue)
+        {
+            query = query.Where(x =>
+                (x.Procitano ?? false) == request.IsRead.Value);
+        }
+
+        return await query
             .OrderByDescending(x => x.DatumSlanja)
             .Select(x => new GetMyNotificationsItemDto
             {

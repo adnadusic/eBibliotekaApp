@@ -9,6 +9,130 @@
     </div>
   </div>
 
+  <div class="priority-settings">
+    <h2>Prioritetne notifikacije</h2>
+
+    <p>
+      Odaberi koje tipove notifikacija želiš označiti kao prioritetne.
+    </p>
+
+    @if (settingsLoading) {
+      <p class="status-message">
+        Učitavanje postavki...
+      </p>
+    } @else {
+      <div class="priority-options">
+        <button
+          type="button"
+          class="priority-button"
+          [class.active]="isPriority(1)"
+          (click)="togglePriority(1)"
+        >
+          Rezervacije
+
+          @if (isPriority(1)) {
+            <span>★ Prioritetno</span>
+          }
+        </button>
+
+        <button
+          type="button"
+          class="priority-button"
+          [class.active]="isPriority(2)"
+          (click)="togglePriority(2)"
+        >
+          Posudbe
+
+          @if (isPriority(2)) {
+            <span>★ Prioritetno</span>
+          }
+        </button>
+
+        <button
+          type="button"
+          class="priority-button"
+          [class.active]="isPriority(3)"
+          (click)="togglePriority(3)"
+        >
+          Kazne
+
+          @if (isPriority(3)) {
+            <span>★ Prioritetno</span>
+          }
+        </button>
+
+        <button
+          type="button"
+          class="priority-button"
+          [class.active]="isPriority(4)"
+          (click)="togglePriority(4)"
+        >
+          Opšte
+
+          @if (isPriority(4)) {
+            <span>★ Prioritetno</span>
+          }
+        </button>
+      </div>
+    }
+  </div>
+
+  <div class="notification-filters">
+    <div class="filter-group">
+      <label for="typeFilter">
+        Tip notifikacije
+      </label>
+
+      <select
+        id="typeFilter"
+        (change)="onTypeFilterChange($event)"
+      >
+        <option value="">
+          Sve
+        </option>
+
+        <option value="1">
+          Rezervacije
+        </option>
+
+        <option value="2">
+          Posudbe
+        </option>
+
+        <option value="3">
+          Kazne
+        </option>
+
+        <option value="4">
+          Opšte
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="readFilter">
+        Status
+      </label>
+
+      <select
+        id="readFilter"
+        (change)="onReadFilterChange($event)"
+      >
+        <option value="all">
+          Sve
+        </option>
+
+        <option value="unread">
+          Nepročitane
+        </option>
+
+        <option value="read">
+          Pročitane
+        </option>
+      </select>
+    </div>
+  </div>
+
   @if (loading) {
     <p class="status-message">
       Učitavanje notifikacija...
@@ -23,14 +147,25 @@
 
   @if (!loading && !errorMessage) {
     <div class="notifications-list">
-      @for (notification of notifications; track notification.id) {
+      @for (notification of sortedNotifications; track notification.id) {
         <article
           class="notification-card"
           [class.unread]="!notification.isRead"
+          [class.priority]="isPriority(notification.type)"
         >
           <div class="notification-content">
             <div class="notification-header">
-              <h2>{{ notification.title }}</h2>
+              <div>
+                <h2>
+                  {{ notification.title }}
+                </h2>
+
+                @if (isPriority(notification.type)) {
+                  <span class="priority-badge">
+                    ★ Prioritetna
+                  </span>
+                }
+              </div>
 
               @if (notification.isRead) {
                 <span class="status read">
