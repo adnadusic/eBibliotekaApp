@@ -3,11 +3,24 @@
 
   <nav>
     @if (authService.isLoggedIn()) {
-      <a routerLink="/notifications">Notifikacije</a>
+      <a routerLink="/notifications">
+        Notifikacije
+      </a>
 
-      <button type="button" (click)="logout()">Odjava</button>
+      <a routerLink="/audit-trail">
+        Audit Trail
+      </a>
+
+      <button
+        type="button"
+        (click)="logout()"
+      >
+        Odjava
+      </button>
     } @else {
-      <a routerLink="/login">Prijava</a>
+      <a routerLink="/login">
+        Prijava
+      </a>
     }
   </nav>
 </header>

@@ -29,17 +29,21 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<ListaZelja> ListeZelja { get; set; } = null!;
     public DbSet<Obavijest> Obavijesti { get; set; } = null!;
     public DbSet<PostavkaObavijesti> PostavkeObavijesti { get; set; } = null!;
+    public DbSet<AuditLog> AuditLogs { get; set; } = null!;
 
     public DbSet<SistemskePostavke> SistemskePostavke { get; set; } = null!;
     public DbSet<UpravljanjeKorisnicima> UpravljanjeKorisnicima { get; set; } = null!;
 
     private readonly TimeProvider _clock;
+    private readonly IAppCurrentUser _currentUser;
 
     public DatabaseContext(
         DbContextOptions<DatabaseContext> options,
-        TimeProvider clock)
+        TimeProvider clock,
+        IAppCurrentUser currentUser)
         : base(options)
     {
         _clock = clock;
+        _currentUser = currentUser;
     }
 }

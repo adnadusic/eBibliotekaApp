@@ -28,6 +28,7 @@ public interface IAppDbContext
     DbSet<ListaZelja> ListeZelja { get; set; }
     DbSet<Obavijest> Obavijesti { get; set; }
     DbSet<PostavkaObavijesti> PostavkeObavijesti { get; set; }
+    DbSet<AuditLog> AuditLogs { get; set; }
 
     DbSet<SistemskePostavke> SistemskePostavke { get; set; }
     DbSet<UpravljanjeKorisnicima> UpravljanjeKorisnicima { get; set; }
