@@ -1,0 +1,141 @@
+<section class="reports-page">
+  <div class="page-header">
+    <h1>PDF izvještaji</h1>
+
+    <p>
+      Generisanje izvještaja prema odabranim parametrima.
+    </p>
+  </div>
+
+  @if (errorMessage) {
+    <p class="error-message">
+      {{ errorMessage }}
+    </p>
+  }
+
+  <div class="reports-grid">
+    <article class="report-card">
+      <h2>
+        Izvještaj recenzija knjige
+      </h2>
+
+      <p>
+        Generiše PDF sa recenzijama odabrane knjige za zadani period.
+      </p>
+
+      <div class="form-group">
+        <label for="bookId">
+          Book ID
+        </label>
+
+        <input
+          id="bookId"
+          type="number"
+          min="1"
+          [value]="bookId"
+          (input)="onBookIdChange($event)"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="bookDateFrom">
+          Datum od
+        </label>
+
+        <input
+          id="bookDateFrom"
+          type="date"
+          [value]="bookDateFrom"
+          (input)="onBookDateFromChange($event)"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="bookDateTo">
+          Datum do
+        </label>
+
+        <input
+          id="bookDateTo"
+          type="date"
+          [value]="bookDateTo"
+          (input)="onBookDateToChange($event)"
+        />
+      </div>
+
+      <button
+        type="button"
+        (click)="generateBookReviewsPdf()"
+        [disabled]="bookReportLoading"
+      >
+        @if (bookReportLoading) {
+          Generisanje...
+        } @else {
+          Preuzmi PDF
+        }
+      </button>
+    </article>
+
+    <article class="report-card">
+      <h2>
+        Audit Trail izvještaj
+      </h2>
+
+      <p>
+        Generiše PDF sa Audit Trail zapisima odabranog korisnika za zadani period.
+      </p>
+
+      <div class="form-group">
+        <label for="auditUserId">
+          User ID
+        </label>
+
+        <input
+          id="auditUserId"
+          type="number"
+          min="1"
+          [value]="auditUserId"
+          (input)="onAuditUserIdChange($event)"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="auditDateFrom">
+          Datum od
+        </label>
+
+        <input
+          id="auditDateFrom"
+          type="date"
+          [value]="auditDateFrom"
+          (input)="onAuditDateFromChange($event)"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="auditDateTo">
+          Datum do
+        </label>
+
+        <input
+          id="auditDateTo"
+          type="date"
+          [value]="auditDateTo"
+          (input)="onAuditDateToChange($event)"
+        />
+      </div>
+
+      <button
+        type="button"
+        (click)="generateAuditTrailPdf()"
+        [disabled]="auditReportLoading"
+      >
+        @if (auditReportLoading) {
+          Generisanje...
+        } @else {
+          Preuzmi PDF
+        }
+      </button>
+    </article>
+  </div>
+</section>
