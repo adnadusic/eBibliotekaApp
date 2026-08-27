@@ -1,5 +1,7 @@
 <header class="app-header">
-  <a class="brand" routerLink="/">eBiblioteka</a>
+  <a class="brand" routerLink="/">
+    eBiblioteka
+  </a>
 
   <nav>
     @if (authService.isLoggedIn()) {
@@ -9,6 +11,10 @@
 
       <a routerLink="/audit-trail">
         Audit Trail
+      </a>
+
+      <a routerLink="/reports">
+        PDF izvještaji
       </a>
 
       <button
