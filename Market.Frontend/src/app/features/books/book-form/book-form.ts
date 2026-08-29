@@ -94,7 +94,7 @@ export class BookForm implements OnInit {
       },
       error: (error) => {
         console.error(error);
-        this.errorMessage = 'Failed to load book.';
+        this.errorMessage = 'Nije moguće učitati knjigu.';
         this.loading = false;
         this.cdr.detectChanges();
       },
