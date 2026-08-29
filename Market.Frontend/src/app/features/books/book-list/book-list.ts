@@ -96,7 +96,7 @@ export class BookList implements OnInit {
         },
         error: (error) => {
           console.error(error);
-          this.errorMessage = 'Failed to load books.';
+          this.errorMessage = 'Nije moguće učitati knjige.';
           this.loading = false;
           this.cdr.detectChanges();
         },
