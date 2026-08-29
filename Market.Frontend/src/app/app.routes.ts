@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+import { adminGuard } from './core/guards/admin.guard';
 import { authGuard } from './core/guards/auth.guard';
 import { Login } from './features/auth/login/login';
 import { AuditTrailPage } from './features/audit-trail/audit-trail';
@@ -27,12 +28,12 @@ export const routes: Routes = [
   {
     path: 'books/new',
     component: BookForm,
-    canActivate: [authGuard],
+    canActivate: [adminGuard],
   },
   {
     path: 'books/:id/edit',
     component: BookForm,
-    canActivate: [authGuard],
+    canActivate: [adminGuard],
   },
   {
     path: 'books/:id',

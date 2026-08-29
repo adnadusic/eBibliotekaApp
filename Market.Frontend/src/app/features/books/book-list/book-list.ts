@@ -8,6 +8,7 @@ import {
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { AuthService } from '../../../core/services/auth';
 import {
   BookListItem,
   BooksService,
@@ -29,6 +30,7 @@ type SortDirection = 'asc' | 'desc';
 })
 export class BookList implements OnInit {
   private readonly booksService = inject(BooksService);
+  private readonly authService = inject(AuthService);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -57,6 +59,10 @@ export class BookList implements OnInit {
 
   get totalPages(): number {
     return Math.max(1, Math.ceil(this.total / this.pageSize));
+  }
+
+  get isAdmin(): boolean {
+    return this.authService.isAdmin();
   }
 
   ngOnInit(): void {

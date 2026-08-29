@@ -5,9 +5,15 @@
       <p>Pregled i pretraga knjiga u e-Biblioteci.</p>
     </div>
 
-    <button type="button" class="primary-action" (click)="createBook()">
-      Dodaj knjigu
-    </button>
+    @if (isAdmin) {
+      <button
+        type="button"
+        class="primary-action"
+        (click)="createBook()"
+      >
+        Dodaj knjigu
+      </button>
+    }
   </div>
 
   <form
@@ -71,7 +77,11 @@
     <div class="filter-actions">
       <button type="submit">Filtriraj</button>
 
-      <button type="button" class="secondary" (click)="resetFilters()">
+      <button
+        type="button"
+        class="secondary"
+        (click)="resetFilters()"
+      >
         Resetuj
       </button>
     </div>
@@ -164,21 +174,23 @@
                   Detalji
                 </button>
 
-                <button
-                  type="button"
-                  class="edit-button"
-                  (click)="editBook(book.id)"
-                >
-                  Uredi
-                </button>
+                @if (isAdmin) {
+                  <button
+                    type="button"
+                    class="edit-button"
+                    (click)="editBook(book.id)"
+                  >
+                    Uredi
+                  </button>
 
-                <button
-                  type="button"
-                  class="delete-button"
-                  (click)="deleteBook(book)"
-                >
-                  Obriši
-                </button>
+                  <button
+                    type="button"
+                    class="delete-button"
+                    (click)="deleteBook(book)"
+                  >
+                    Obriši
+                  </button>
+                }
               </td>
             </tr>
           } @empty {
@@ -225,7 +237,9 @@
         aria-labelledby="delete-modal-title"
         (click)="$event.stopPropagation()"
       >
-        <h2 id="delete-modal-title">Potvrda brisanja</h2>
+        <h2 id="delete-modal-title">
+          Potvrda brisanja
+        </h2>
 
         <p>
           Da li sigurno želiš obrisati knjigu

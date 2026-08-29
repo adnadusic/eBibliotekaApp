@@ -2,34 +2,51 @@
 using Market.Domain.Entities.Catalog;
 using Market.Domain.Enums;
 
-public sealed class UpdateBookCommandHandler(IAppDbContext ctx)
+public sealed class UpdateBookCommandHandler(
+    IAppDbContext ctx,
+    IAppCurrentUser currentUser)
     : IRequestHandler<UpdateBookCommand, UpdateBookCommandDto>
 {
     public async Task<UpdateBookCommandDto> Handle(
         UpdateBookCommand request,
         CancellationToken ct)
     {
+        if (!currentUser.IsAdmin)
+        {
+            throw new UnauthorizedAccessException(
+                "Only administrators can update books.");
+        }
+
         var book = await ctx.Knjige
             .Include(x => x.Autori)
             .Include(x => x.Zanrovi)
-            .FirstOrDefaultAsync(x => x.Id == request.Id && !x.IsDeleted, ct)
-            ?? throw new MarketNotFoundException("Book was not found.");
+            .FirstOrDefaultAsync(
+                x => x.Id == request.Id && !x.IsDeleted,
+                ct)
+            ?? throw new MarketNotFoundException(
+                "Book was not found.");
 
         var languageExists = await ctx.Jezici
-            .AnyAsync(x => x.Id == request.LanguageId && !x.IsDeleted, ct);
+            .AnyAsync(
+                x => x.Id == request.LanguageId && !x.IsDeleted,
+                ct);
 
         if (!languageExists)
-            throw new MarketNotFoundException("Language was not found.");
+            throw new MarketNotFoundException(
+                "Language was not found.");
 
         if (request.PublisherId.HasValue)
         {
             var publisherExists = await ctx.Izdavaci
                 .AnyAsync(
-                    x => x.Id == request.PublisherId.Value && !x.IsDeleted,
+                    x =>
+                        x.Id == request.PublisherId.Value &&
+                        !x.IsDeleted,
                     ct);
 
             if (!publisherExists)
-                throw new MarketNotFoundException("Publisher was not found.");
+                throw new MarketNotFoundException(
+                    "Publisher was not found.");
         }
 
         var authorIds = request.AuthorIds
@@ -39,7 +56,10 @@ public sealed class UpdateBookCommandHandler(IAppDbContext ctx)
         if (authorIds.Count > 0)
         {
             var existingAuthorIds = await ctx.Autori
-                .Where(x => authorIds.Contains(x.Id) && !x.IsDeleted)
+                .Where(
+                    x =>
+                        authorIds.Contains(x.Id) &&
+                        !x.IsDeleted)
                 .Select(x => x.Id)
                 .ToListAsync(ct);
 
@@ -55,7 +75,10 @@ public sealed class UpdateBookCommandHandler(IAppDbContext ctx)
         if (genreIds.Count > 0)
         {
             var existingGenreIds = await ctx.Zanrovi
-                .Where(x => genreIds.Contains(x.Id) && !x.IsDeleted)
+                .Where(
+                    x =>
+                        genreIds.Contains(x.Id) &&
+                        !x.IsDeleted)
                 .Select(x => x.Id)
                 .ToListAsync(ct);
 
@@ -70,8 +93,10 @@ public sealed class UpdateBookCommandHandler(IAppDbContext ctx)
         book.BrojStranica = request.PageCount;
         book.JezikId = request.LanguageId;
         book.PublisherId = request.PublisherId;
-        book.Opis = request.Description?.Trim() ?? string.Empty;
-        book.SlikaKorice = request.CoverImage?.Trim() ?? string.Empty;
+        book.Opis =
+            request.Description?.Trim() ?? string.Empty;
+        book.SlikaKorice =
+            request.CoverImage?.Trim() ?? string.Empty;
 
         book.Autori.Clear();
 
