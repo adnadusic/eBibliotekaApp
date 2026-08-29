@@ -200,3 +200,69 @@ table {
   font-weight: inherit;
   cursor: pointer;
 }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.confirmation-modal {
+  width: 100%;
+  max-width: 440px;
+  padding: 24px;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2);
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 16px;
+  }
+
+  p {
+    margin: 0 0 12px;
+    line-height: 1.5;
+  }
+}
+
+.modal-warning {
+  color: #a40000;
+  font-weight: 600;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.cancel-button,
+.confirm-delete-button {
+  padding: 9px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.cancel-button {
+  border: 1px solid #ccc;
+  background: white;
+}
+
+.confirm-delete-button {
+  border: 1px solid #a40000;
+  background: #a40000;
+  color: white;
+}
+
+.cancel-button:hover,
+.confirm-delete-button:hover {
+  opacity: 0.85;
+}
