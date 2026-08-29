@@ -2,6 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
+
 export interface BookListItem {
   id: number;
   title: string;
@@ -86,7 +88,7 @@ export interface BookFilters {
 export class BooksService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://localhost:7260/api/books';
+  private readonly apiUrl = `${environment.apiUrl}/api/books`;
 
   getPaged(filters: BookFilters): Observable<PagedBooksResult> {
     let params = new HttpParams()
@@ -121,22 +123,39 @@ export class BooksService {
       params = params.set('sortDirection', filters.sortDirection);
     }
 
-    return this.http.get<PagedBooksResult>(this.apiUrl, { params });
+    return this.http.get<PagedBooksResult>(
+      this.apiUrl,
+      { params }
+    );
   }
 
   getById(id: number): Observable<BookDetails> {
-    return this.http.get<BookDetails>(`${this.apiUrl}/${id}`);
+    return this.http.get<BookDetails>(
+      `${this.apiUrl}/${id}`
+    );
   }
 
-  create(request: BookUpsertRequest): Observable<CreateBookResponse> {
-    return this.http.post<CreateBookResponse>(this.apiUrl, request);
+  create(
+    request: BookUpsertRequest
+  ): Observable<CreateBookResponse> {
+    return this.http.post<CreateBookResponse>(
+      this.apiUrl,
+      request
+    );
   }
 
-  update(request: UpdateBookRequest): Observable<UpdateBookResponse> {
-    return this.http.put<UpdateBookResponse>(this.apiUrl, request);
+  update(
+    request: UpdateBookRequest
+  ): Observable<UpdateBookResponse> {
+    return this.http.put<UpdateBookResponse>(
+      this.apiUrl,
+      request
+    );
   }
 
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(
+      `${this.apiUrl}/${id}`
+    );
   }
 }

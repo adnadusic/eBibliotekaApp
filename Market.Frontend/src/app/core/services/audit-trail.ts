@@ -2,6 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
+
 export interface AuditLogItem {
   id: number;
   userId: number | null;
@@ -21,7 +23,7 @@ export class AuditTrailService {
   private readonly http = inject(HttpClient);
 
   private readonly apiUrl =
-    'https://localhost:7260/api/audit-trail';
+    `${environment.apiUrl}/api/audit-trail`;
 
   getAuditLogs(
     entityName?: string,

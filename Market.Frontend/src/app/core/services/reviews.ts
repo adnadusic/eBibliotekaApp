@@ -2,6 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
+
 export interface ReviewItem {
   id: number;
   userId: number;
@@ -42,7 +44,8 @@ export interface ReactToReviewRequest {
 export class ReviewsService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://localhost:7260/api/reviews';
+  private readonly apiUrl =
+    `${environment.apiUrl}/api/reviews`;
 
   getByBook(bookId: number): Observable<ReviewItem[]> {
     return this.http.get<ReviewItem[]>(
