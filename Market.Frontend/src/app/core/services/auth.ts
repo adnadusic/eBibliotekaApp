@@ -76,6 +76,36 @@ export class AuthService {
     return !!this.getAccessToken();
   }
 
+  isAdmin(): boolean {
+    const token = this.getAccessToken();
+
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const payloadPart = token.split('.')[1];
+
+      if (!payloadPart) {
+        return false;
+      }
+
+      let base64 = payloadPart
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+
+      while (base64.length % 4 !== 0) {
+        base64 += '=';
+      }
+
+      const payload = JSON.parse(atob(base64));
+
+      return String(payload['is_admin']).toLowerCase() === 'true';
+    } catch {
+      return false;
+    }
+  }
+
   private clearTokens(): void {
     localStorage.removeItem(this.accessTokenKey);
     localStorage.removeItem(this.refreshTokenKey);
