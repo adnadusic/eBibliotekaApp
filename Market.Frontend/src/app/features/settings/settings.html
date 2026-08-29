@@ -1,0 +1,72 @@
+<section class="settings-page">
+  <div class="page-header">
+    <div>
+      <h1>Settings</h1>
+
+      <p>
+        Upravljaj korisničkim postavkama eBiblioteke.
+      </p>
+    </div>
+  </div>
+
+  <section class="settings-section">
+    <div class="section-header">
+      <h2>Prioritetne notifikacije</h2>
+
+      <p>
+        Odaberi koje tipove notifikacija želiš označiti
+        kao prioritetne.
+      </p>
+    </div>
+
+    @if (loading) {
+      <p class="status-message">
+        Učitavanje postavki...
+      </p>
+    }
+
+    @if (errorMessage) {
+      <p class="error-message">
+        {{ errorMessage }}
+      </p>
+    }
+
+    @if (successMessage) {
+      <p class="success-message">
+        {{ successMessage }}
+      </p>
+    }
+
+    @if (!loading) {
+      <div class="settings-list">
+        @for (item of notificationTypes; track item.type) {
+          <article class="setting-card">
+            <div>
+              <h3>{{ item.name }}</h3>
+
+              <p>
+                {{ item.description }}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              class="priority-button"
+              [class.active]="isPriority(item.type)"
+              [disabled]="savingType === item.type"
+              (click)="togglePriority(item.type)"
+            >
+              @if (savingType === item.type) {
+                Čuvanje...
+              } @else if (isPriority(item.type)) {
+                Prioritetno
+              } @else {
+                Standardno
+              }
+            </button>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</section>

@@ -1,0 +1,122 @@
+:host {
+  display: block;
+}
+
+.settings-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 32px 70px;
+  color: #222;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.page-header {
+  margin-bottom: 40px;
+}
+
+.page-header h1 {
+  margin: 0 0 10px;
+  font-size: 36px;
+}
+
+.page-header p {
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
+}
+
+.settings-section {
+  padding-top: 30px;
+  border-top: 1px solid #ddd;
+}
+
+.section-header {
+  margin-bottom: 25px;
+}
+
+.section-header h2 {
+  margin: 0 0 10px;
+  font-size: 26px;
+}
+
+.section-header p {
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.setting-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  padding: 22px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.setting-card h3 {
+  margin: 0 0 7px;
+  font-size: 18px;
+}
+
+.setting-card p {
+  margin: 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.priority-button {
+  min-width: 125px;
+  padding: 10px 16px;
+  border: 1px solid #999;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.priority-button.active {
+  border-color: #3f342c;
+  background: #3f342c;
+  color: #fff;
+}
+
+.priority-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.status-message,
+.error-message,
+.success-message {
+  margin: 0 0 20px;
+  padding: 13px 15px;
+  border: 1px solid #ddd;
+}
+
+.error-message {
+  border-color: #c88;
+  background: #fff5f5;
+}
+
+.success-message {
+  border-color: #8b9;
+  background: #f5fff7;
+}
+
+@media (max-width: 650px) {
+  .setting-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .priority-button {
+    width: 100%;
+  }
+}
