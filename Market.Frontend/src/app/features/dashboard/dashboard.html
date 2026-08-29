@@ -1,0 +1,87 @@
+<div class="dashboard-page">
+  <div class="dashboard-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>
+        Pregled najvažnijih informacija i brz pristup funkcionalnostima
+        eBiblioteke.
+      </p>
+    </div>
+
+    <a routerLink="/books" class="primary-button">
+      Pregledaj knjige
+    </a>
+  </div>
+
+  @if (loading) {
+    <div class="message">
+      Učitavanje podataka...
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (!loading) {
+    <section class="summary-grid">
+      <article class="summary-card">
+        <span class="summary-label">Knjige</span>
+        <strong>{{ totalBooks }}</strong>
+        <p>Ukupan broj knjiga u biblioteci.</p>
+
+        <a routerLink="/books">
+          Otvori knjige
+        </a>
+      </article>
+
+      <article class="summary-card">
+        <span class="summary-label">Notifikacije</span>
+        <strong>{{ unreadNotifications }}</strong>
+        <p>Broj trenutno nepročitanih notifikacija.</p>
+
+        <a routerLink="/notifications">
+          Otvori notifikacije
+        </a>
+      </article>
+
+      <article class="summary-card">
+        <span class="summary-label">Prioriteti</span>
+        <strong>{{ priorityNotificationTypes }}</strong>
+        <p>Broj tipova notifikacija označenih kao prioritetni.</p>
+
+        <a routerLink="/notifications">
+          Upravljaj prioritetima
+        </a>
+      </article>
+    </section>
+  }
+
+  <section class="quick-links">
+    <h2>Brzi pristup</h2>
+
+    <div class="quick-links-grid">
+      <a routerLink="/books">
+        <strong>Knjige</strong>
+        <span>Pregled, pretraga i upravljanje knjigama.</span>
+      </a>
+
+      <a routerLink="/notifications">
+        <strong>Notifikacije</strong>
+        <span>Pregled statusa i prioritetnih obavijesti.</span>
+      </a>
+
+      <a routerLink="/audit-trail">
+        <strong>Audit Trail</strong>
+        <span>Pregled evidentiranih promjena u sistemu.</span>
+      </a>
+
+      <a routerLink="/reports">
+        <strong>PDF izvještaji</strong>
+        <span>Generisanje izvještaja sa parametrima.</span>
+      </a>
+    </div>
+  </section>
+</div>

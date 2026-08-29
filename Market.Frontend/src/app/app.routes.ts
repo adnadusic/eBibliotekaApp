@@ -6,6 +6,7 @@ import { AuditTrailPage } from './features/audit-trail/audit-trail';
 import { BookDetailsPage } from './features/books/book-details/book-details';
 import { BookForm } from './features/books/book-form/book-form';
 import { BookList } from './features/books/book-list/book-list';
+import { DashboardPage } from './features/dashboard/dashboard';
 import { Landing } from './features/landing/landing';
 import { NotificationsPage } from './features/notifications/notifications';
 import { ReportsPage } from './features/reports/reports';
@@ -36,6 +37,11 @@ export const routes: Routes = [
   {
     path: 'books/:id',
     component: BookDetailsPage,
+  },
+  {
+    path: 'dashboard',
+    component: DashboardPage,
+    canActivate: [authGuard],
   },
   {
     path: 'notifications',

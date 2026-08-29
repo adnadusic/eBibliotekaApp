@@ -5,6 +5,10 @@
 
   <nav>
     @if (authService.isLoggedIn()) {
+      <a routerLink="/dashboard">
+        Dashboard
+      </a>
+
       <a routerLink="/notifications">
         Notifikacije
       </a>
