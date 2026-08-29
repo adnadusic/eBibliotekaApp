@@ -45,6 +45,8 @@ export class BookList implements OnInit {
   loading = false;
   errorMessage = '';
 
+  bookPendingDelete: BookListItem | null = null;
+
   readonly filterForm = this.fb.group({
     title: [''],
     isbn: [''],
@@ -147,13 +149,21 @@ export class BookList implements OnInit {
   }
 
   deleteBook(book: BookListItem): void {
-    const confirmed = window.confirm(
-      `Da li sigurno želiš obrisati knjigu "${book.title}"?`
-    );
+    this.bookPendingDelete = book;
+  }
 
-    if (!confirmed) {
+  cancelDelete(): void {
+    this.bookPendingDelete = null;
+  }
+
+  confirmDelete(): void {
+    const book = this.bookPendingDelete;
+
+    if (!book) {
       return;
     }
+
+    this.bookPendingDelete = null;
 
     this.booksService.delete(book.id).subscribe({
       next: () => {
