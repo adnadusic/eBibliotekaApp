@@ -2,6 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, finalize, of, tap } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
+
 export interface LoginRequest {
   email: string;
   password: string;
@@ -19,15 +21,27 @@ export interface LoginResponse {
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'https://localhost:7260/api/auth';
+
+  private readonly apiUrl = `${environment.apiUrl}/api/auth`;
+
   private readonly accessTokenKey = 'access_token';
   private readonly refreshTokenKey = 'refresh_token';
 
   login(request: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, request).pipe(
+    return this.http.post<LoginResponse>(
+      `${this.apiUrl}/login`,
+      request
+    ).pipe(
       tap((response) => {
-        localStorage.setItem(this.accessTokenKey, response.accessToken);
-        localStorage.setItem(this.refreshTokenKey, response.refreshToken);
+        localStorage.setItem(
+          this.accessTokenKey,
+          response.accessToken
+        );
+
+        localStorage.setItem(
+          this.refreshTokenKey,
+          response.refreshToken
+        );
       }),
     );
   }
@@ -41,8 +55,13 @@ export class AuthService {
     }
 
     return this.http
-      .post<void>(`${this.apiUrl}/logout`, { refreshToken })
-      .pipe(finalize(() => this.clearTokens()));
+      .post<void>(
+        `${this.apiUrl}/logout`,
+        { refreshToken }
+      )
+      .pipe(
+        finalize(() => this.clearTokens())
+      );
   }
 
   getAccessToken(): string | null {
