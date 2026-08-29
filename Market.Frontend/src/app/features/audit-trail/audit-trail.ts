@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
@@ -11,7 +12,7 @@ import {
 
 @Component({
   selector: 'app-audit-trail',
-  imports: [],
+  imports: [DatePipe],
   templateUrl: './audit-trail.html',
   styleUrl: './audit-trail.scss',
 })
