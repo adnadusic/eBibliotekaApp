@@ -11,9 +11,11 @@ namespace Market.Domain.Entities.Catalog
         public string Naslov { get; set; }
         public string Komentar { get; set; }
         public DateTime Datum { get; set; }
-        public int? BrojHelpful { get; set; }
-        public int? BrojUnhelpful { get; set; }
-        public bool? Izmijenjeno { get; set; }
+
+        public int BrojHelpful { get; set; }
+        public int BrojUnhelpful { get; set; }
+        public bool Izmijenjeno { get; set; }
+
         public DateTime? DatumIzmjene { get; set; }
 
         public MarketUserEntity User { get; set; }

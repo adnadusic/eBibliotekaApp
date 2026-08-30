@@ -13,11 +13,13 @@ namespace Market.Domain.Entities.Catalog
         public string Opis { get; set; }
         public string SlikaKorice { get; set; }
         public int? PublisherId { get; set; }
-        public int? UkupnoPrimjeraka { get; set; }
-        public int? DostupnoPrimjeraka { get; set; }
-        public decimal? ProsjecnaOcjena { get; set; }
-        public int? BrojOcjena { get; set; }
-        public int? BrojPregleda { get; set; }
+
+        public int UkupnoPrimjeraka { get; set; }
+        public int DostupnoPrimjeraka { get; set; }
+        public decimal ProsjecnaOcjena { get; set; }
+        public int BrojOcjena { get; set; }
+        public int BrojPregleda { get; set; }
+
         public DateTime? DatumDodavanja { get; set; }
 
         public Izdavac? Publisher { get; set; }
