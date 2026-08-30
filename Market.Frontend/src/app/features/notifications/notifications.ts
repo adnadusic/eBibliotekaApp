@@ -27,6 +27,10 @@ export class NotificationsPage implements OnInit {
   selectedType?: number;
   selectedReadStatus: 'all' | 'read' | 'unread' = 'all';
 
+  page = 1;
+  readonly pageSize = 10;
+  total = 0;
+
   constructor(
     private readonly notificationsService: NotificationsService,
     private readonly cdr: ChangeDetectorRef
@@ -69,13 +73,16 @@ export class NotificationsPage implements OnInit {
     }
 
     this.notificationsService
-      .getMyNotifications(
+      .getMyNotificationsPage(
         this.selectedType,
-        isRead
+        isRead,
+        this.page,
+        this.pageSize
       )
       .subscribe({
-        next: (notifications) => {
-          this.notifications = notifications;
+        next: (result) => {
+          this.notifications = result.items;
+          this.total = result.total;
           this.loading = false;
           this.cdr.detectChanges();
         },
@@ -167,6 +174,7 @@ export class NotificationsPage implements OnInit {
         ? undefined
         : Number(value);
 
+    this.page = 1;
     this.loadNotifications();
   }
 
@@ -183,6 +191,40 @@ export class NotificationsPage implements OnInit {
       this.selectedReadStatus = 'all';
     }
 
+    this.page = 1;
+    this.loadNotifications();
+  }
+
+  get totalPages(): number {
+    return Math.max(
+      1,
+      Math.ceil(this.total / this.pageSize)
+    );
+  }
+
+  get hasPreviousPage(): boolean {
+    return this.page > 1;
+  }
+
+  get hasNextPage(): boolean {
+    return this.page < this.totalPages;
+  }
+
+  previousPage(): void {
+    if (!this.hasPreviousPage) {
+      return;
+    }
+
+    this.page--;
+    this.loadNotifications();
+  }
+
+  nextPage(): void {
+    if (!this.hasNextPage) {
+      return;
+    }
+
+    this.page++;
     this.loadNotifications();
   }
 

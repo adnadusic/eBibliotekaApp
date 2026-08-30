@@ -1,9 +1,11 @@
 ﻿namespace Market.Application.Modules.Catalog.Reviews.Queries.GetByBook;
 
 public sealed class GetReviewsByBookQueryHandler(IAppDbContext ctx)
-    : IRequestHandler<GetReviewsByBookQuery, List<GetReviewsByBookItemDto>>
+    : IRequestHandler<
+        GetReviewsByBookQuery,
+        PageResult<GetReviewsByBookItemDto>>
 {
-    public async Task<List<GetReviewsByBookItemDto>> Handle(
+    public async Task<PageResult<GetReviewsByBookItemDto>> Handle(
         GetReviewsByBookQuery request,
         CancellationToken ct)
     {
@@ -17,12 +19,13 @@ public sealed class GetReviewsByBookQueryHandler(IAppDbContext ctx)
             throw new MarketNotFoundException("Book was not found.");
         }
 
-        return await ctx.Reviews
+        var projectedQuery = ctx.Reviews
             .AsNoTracking()
             .Where(x =>
                 x.BookId == request.BookId &&
                 !x.IsDeleted)
             .OrderByDescending(x => x.CreatedAt)
+            .ThenByDescending(x => x.Id)
             .Select(x => new GetReviewsByBookItemDto
             {
                 Id = x.Id,
@@ -34,7 +37,9 @@ public sealed class GetReviewsByBookQueryHandler(IAppDbContext ctx)
                 Date = x.CreatedAt,
                 HelpfulCount = x.HelpfulCount,
                 UnhelpfulCount = x.UnhelpfulCount
-            })
-            .ToListAsync(ct);
+            });
+
+        return await PageResult<GetReviewsByBookItemDto>
+            .FromQueryableAsync(projectedQuery, request.Paging, ct);
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace Market.Application.Modules.AuditTrail.Queries.GetAuditLogs;
 
 public sealed class GetAuditLogsQuery
-    : IRequest<List<GetAuditLogsItemDto>>
+    : BasePagedQuery<GetAuditLogsItemDto>
 {
     public string? EntityName { get; init; }
 

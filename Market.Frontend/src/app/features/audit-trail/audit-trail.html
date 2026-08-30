@@ -167,5 +167,30 @@
         </p>
       }
     </div>
+
+    @if (total > 0) {
+      <div class="pagination-controls">
+        <button
+          type="button"
+          (click)="previousPage()"
+          [disabled]="!hasPreviousPage"
+        >
+          Previous
+        </button>
+
+        <span>
+          Page {{ page }} of {{ totalPages }}
+          ({{ total }} entries)
+        </span>
+
+        <button
+          type="button"
+          (click)="nextPage()"
+          [disabled]="!hasNextPage"
+        >
+          Next
+        </button>
+      </div>
+    }
   }
 </section>

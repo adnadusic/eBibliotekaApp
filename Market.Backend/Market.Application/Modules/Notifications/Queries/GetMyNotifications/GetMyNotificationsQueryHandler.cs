@@ -5,9 +5,9 @@ public sealed class GetMyNotificationsQueryHandler(
     IAppCurrentUser currentUser)
     : IRequestHandler<
         GetMyNotificationsQuery,
-        List<GetMyNotificationsItemDto>>
+        PageResult<GetMyNotificationsItemDto>>
 {
-    public async Task<List<GetMyNotificationsItemDto>> Handle(
+    public async Task<PageResult<GetMyNotificationsItemDto>> Handle(
         GetMyNotificationsQuery request,
         CancellationToken ct)
     {
@@ -37,8 +37,9 @@ public sealed class GetMyNotificationsQueryHandler(
                 x.IsRead == request.IsRead.Value);
         }
 
-        return await query
+        var projectedQuery = query
             .OrderByDescending(x => x.SentAt)
+            .ThenByDescending(x => x.Id)
             .Select(x => new GetMyNotificationsItemDto
             {
                 Id = x.Id,
@@ -48,7 +49,9 @@ public sealed class GetMyNotificationsQueryHandler(
                 SentAt = x.SentAt,
                 IsRead = x.IsRead,
                 ReadAt = x.ReadAt
-            })
-            .ToListAsync(ct);
+            });
+
+        return await PageResult<GetMyNotificationsItemDto>
+            .FromQueryableAsync(projectedQuery, request.Paging, ct);
     }
 }

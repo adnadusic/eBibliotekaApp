@@ -272,6 +272,31 @@
           }
         }
       </div>
+
+      @if (!reviewsLoading && reviewsTotal > 0) {
+        <div class="pagination-controls">
+          <button
+            type="button"
+            (click)="previousReviewsPage()"
+            [disabled]="!hasPreviousReviewsPage"
+          >
+            Previous
+          </button>
+
+          <span>
+            Page {{ reviewsPage }} of {{ reviewsTotalPages }}
+            ({{ reviewsTotal }} reviews)
+          </span>
+
+          <button
+            type="button"
+            (click)="nextReviewsPage()"
+            [disabled]="!hasNextReviewsPage"
+          >
+            Next
+          </button>
+        </div>
+      }
     </section>
   }
 </section>

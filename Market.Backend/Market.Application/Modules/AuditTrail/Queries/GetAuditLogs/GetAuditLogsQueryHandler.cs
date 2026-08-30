@@ -4,9 +4,9 @@ public sealed class GetAuditLogsQueryHandler(
     IAppDbContext ctx)
     : IRequestHandler<
         GetAuditLogsQuery,
-        List<GetAuditLogsItemDto>>
+        PageResult<GetAuditLogsItemDto>>
 {
-    public async Task<List<GetAuditLogsItemDto>> Handle(
+    public async Task<PageResult<GetAuditLogsItemDto>> Handle(
         GetAuditLogsQuery request,
         CancellationToken ct)
     {
@@ -26,8 +26,9 @@ public sealed class GetAuditLogsQueryHandler(
                 x.Action == request.Action);
         }
 
-        return await query
+        var projectedQuery = query
             .OrderByDescending(x => x.ChangedAtUtc)
+            .ThenByDescending(x => x.Id)
             .Select(x => new GetAuditLogsItemDto
             {
                 Id = x.Id,
@@ -39,7 +40,9 @@ public sealed class GetAuditLogsQueryHandler(
                 OldValues = x.OldValues,
                 NewValues = x.NewValues,
                 ChangedAtUtc = x.ChangedAtUtc
-            })
-            .ToListAsync(ct);
+            });
+
+        return await PageResult<GetAuditLogsItemDto>
+            .FromQueryableAsync(projectedQuery, request.Paging, ct);
     }
 }

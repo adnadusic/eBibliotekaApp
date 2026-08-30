@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
+import { PageResult } from './page-result';
 
 export interface ReviewItem {
   id: number;
@@ -48,8 +49,27 @@ export class ReviewsService {
     `${environment.apiUrl}/api/reviews`;
 
   getByBook(bookId: number): Observable<ReviewItem[]> {
-    return this.http.get<ReviewItem[]>(
-      `${this.apiUrl}/book/${bookId}`
+    return this.getByBookPage(
+      bookId,
+      1,
+      100
+    ).pipe(
+      map((result) => result.items)
+    );
+  }
+
+  getByBookPage(
+    bookId: number,
+    page = 1,
+    pageSize = 10
+  ): Observable<PageResult<ReviewItem>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+
+    return this.http.get<PageResult<ReviewItem>>(
+      `${this.apiUrl}/book/${bookId}`,
+      { params }
     );
   }
 

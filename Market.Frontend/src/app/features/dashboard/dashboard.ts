@@ -43,9 +43,11 @@ export class DashboardPage implements OnInit {
         pageSize: 1,
       }),
       unreadNotifications:
-        this.notificationsService.getMyNotifications(
+        this.notificationsService.getMyNotificationsPage(
           undefined,
-          false
+          false,
+          1,
+          1
         ),
       notificationSettings:
         this.notificationsService.getMyNotificationSettings(),
@@ -53,7 +55,7 @@ export class DashboardPage implements OnInit {
       next: (result) => {
         this.totalBooks = result.books.total;
         this.unreadNotifications =
-          result.unreadNotifications.length;
+          result.unreadNotifications.total;
         this.priorityNotificationTypes =
           result.notificationSettings.filter(
             (setting) => setting.isPriority

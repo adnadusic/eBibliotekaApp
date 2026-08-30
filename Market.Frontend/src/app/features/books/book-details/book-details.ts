@@ -40,6 +40,10 @@ export class BookDetailsPage implements OnInit {
   book: BookDetailsModel | null = null;
   reviews: ReviewItem[] = [];
 
+  reviewsPage = 1;
+  readonly reviewsPageSize = 10;
+  reviewsTotal = 0;
+
   loading = false;
   reviewsLoading = false;
   submittingReview = false;
@@ -119,22 +123,29 @@ export class BookDetailsPage implements OnInit {
     this.reviewsLoading = true;
     this.reviewErrorMessage = '';
 
-    this.reviewsService.getByBook(bookId).subscribe({
-      next: (reviews) => {
-        this.reviews = reviews;
-        this.reviewsLoading = false;
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error(error);
+    this.reviewsService
+      .getByBookPage(
+        bookId,
+        this.reviewsPage,
+        this.reviewsPageSize
+      )
+      .subscribe({
+        next: (result) => {
+          this.reviews = result.items;
+          this.reviewsTotal = result.total;
+          this.reviewsLoading = false;
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error(error);
 
-        this.reviewErrorMessage =
-          'Failed to load reviews.';
+          this.reviewErrorMessage =
+            'Failed to load reviews.';
 
-        this.reviewsLoading = false;
-        this.cdr.detectChanges();
-      },
-    });
+          this.reviewsLoading = false;
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   submitReview(): void {
@@ -175,6 +186,7 @@ export class BookDetailsPage implements OnInit {
 
           this.submittingReview = false;
 
+          this.reviewsPage = 1;
           this.loadReviews(bookId);
           this.loadBook(bookId);
 
@@ -235,6 +247,41 @@ export class BookDetailsPage implements OnInit {
           this.cdr.detectChanges();
         },
       });
+  }
+
+  get reviewsTotalPages(): number {
+    return Math.max(
+      1,
+      Math.ceil(
+        this.reviewsTotal / this.reviewsPageSize
+      )
+    );
+  }
+
+  get hasPreviousReviewsPage(): boolean {
+    return this.reviewsPage > 1;
+  }
+
+  get hasNextReviewsPage(): boolean {
+    return this.reviewsPage < this.reviewsTotalPages;
+  }
+
+  previousReviewsPage(): void {
+    if (!this.book || !this.hasPreviousReviewsPage) {
+      return;
+    }
+
+    this.reviewsPage--;
+    this.loadReviews(this.book.id);
+  }
+
+  nextReviewsPage(): void {
+    if (!this.book || !this.hasNextReviewsPage) {
+      return;
+    }
+
+    this.reviewsPage++;
+    this.loadReviews(this.book.id);
   }
 
   editBook(): void {

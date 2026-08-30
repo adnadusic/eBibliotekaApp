@@ -1,4 +1,5 @@
-﻿using Market.Application.Modules.Notifications.Commands.SetPriority;
+﻿using Market.Application.Common;
+using Market.Application.Modules.Notifications.Commands.SetPriority;
 using Market.Application.Modules.Notifications.Commands.SetReadStatus;
 using Market.Application.Modules.Notifications.Queries.GetMyNotificationSettings;
 using Market.Application.Modules.Notifications.Queries.GetMyNotifications;
@@ -16,16 +17,23 @@ public sealed class NotificationsController(IMediator mediator)
     : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<GetMyNotificationsItemDto>>> GetMyNotifications(
+    public async Task<ActionResult<PageResult<GetMyNotificationsItemDto>>> GetMyNotifications(
         [FromQuery] NotificationType? type,
         [FromQuery] bool? isRead,
-        CancellationToken ct)
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        CancellationToken ct = default)
     {
         var result = await mediator.Send(
             new GetMyNotificationsQuery
             {
                 Type = type,
-                IsRead = isRead
+                IsRead = isRead,
+                Paging = new PageRequest
+                {
+                    Page = Math.Max(1, page),
+                    PageSize = pageSize
+                }
             },
             ct);
 

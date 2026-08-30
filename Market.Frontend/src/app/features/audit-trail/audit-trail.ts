@@ -25,6 +25,10 @@ export class AuditTrailPage implements OnInit {
   selectedEntity = '';
   selectedAction = '';
 
+  page = 1;
+  readonly pageSize = 10;
+  total = 0;
+
   constructor(
     private readonly auditTrailService: AuditTrailService,
     private readonly cdr: ChangeDetectorRef
@@ -45,10 +49,16 @@ export class AuditTrailPage implements OnInit {
       this.selectedAction || undefined;
 
     this.auditTrailService
-      .getAuditLogs(entityName, action)
+      .getAuditLogsPage(
+        entityName,
+        action,
+        this.page,
+        this.pageSize
+      )
       .subscribe({
-        next: (logs) => {
-          this.auditLogs = logs;
+        next: (result) => {
+          this.auditLogs = result.items;
+          this.total = result.total;
           this.loading = false;
           this.cdr.detectChanges();
         },
@@ -68,6 +78,7 @@ export class AuditTrailPage implements OnInit {
     this.selectedEntity =
       (event.target as HTMLSelectElement).value;
 
+    this.page = 1;
     this.loadAuditLogs();
   }
 
@@ -75,6 +86,40 @@ export class AuditTrailPage implements OnInit {
     this.selectedAction =
       (event.target as HTMLSelectElement).value;
 
+    this.page = 1;
+    this.loadAuditLogs();
+  }
+
+  get totalPages(): number {
+    return Math.max(
+      1,
+      Math.ceil(this.total / this.pageSize)
+    );
+  }
+
+  get hasPreviousPage(): boolean {
+    return this.page > 1;
+  }
+
+  get hasNextPage(): boolean {
+    return this.page < this.totalPages;
+  }
+
+  previousPage(): void {
+    if (!this.hasPreviousPage) {
+      return;
+    }
+
+    this.page--;
+    this.loadAuditLogs();
+  }
+
+  nextPage(): void {
+    if (!this.hasNextPage) {
+      return;
+    }
+
+    this.page++;
     this.loadAuditLogs();
   }
 
