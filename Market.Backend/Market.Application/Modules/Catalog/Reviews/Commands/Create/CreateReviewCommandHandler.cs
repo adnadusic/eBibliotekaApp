@@ -59,8 +59,8 @@ public sealed class CreateReviewCommandHandler(
 
         ctx.Recenzije.Add(review);
 
-        var currentRatingCount = book.BrojOcjena ?? 0;
-        var currentAverageRating = book.ProsjecnaOcjena ?? 0m;
+        var currentRatingCount = book.BrojOcjena;
+        var currentAverageRating = book.ProsjecnaOcjena;
 
         var newRatingCount = currentRatingCount + 1;
 

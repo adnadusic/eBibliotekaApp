@@ -32,8 +32,8 @@ public sealed class GetReviewsByBookQueryHandler(IAppDbContext ctx)
                 Title = x.Naslov,
                 Comment = x.Komentar,
                 Date = x.Datum,
-                HelpfulCount = x.BrojHelpful ?? 0,
-                UnhelpfulCount = x.BrojUnhelpful ?? 0
+                HelpfulCount = x.BrojHelpful,
+                UnhelpfulCount = x.BrojUnhelpful
             })
             .ToListAsync(ct);
     }

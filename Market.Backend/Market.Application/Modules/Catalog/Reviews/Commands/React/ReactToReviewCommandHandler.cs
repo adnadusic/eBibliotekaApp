@@ -52,11 +52,11 @@ public sealed class ReactToReviewCommandHandler(
 
             if (request.ReactionType == ReviewRatingType.Helpful)
             {
-                review.BrojHelpful = (review.BrojHelpful ?? 0) + 1;
+                review.BrojHelpful++;
             }
             else
             {
-                review.BrojUnhelpful = (review.BrojUnhelpful ?? 0) + 1;
+                review.BrojUnhelpful++;
             }
         }
         else if (existingReaction.TipOcjene != request.ReactionType)
@@ -65,19 +65,17 @@ public sealed class ReactToReviewCommandHandler(
             {
                 review.BrojHelpful = Math.Max(
                     0,
-                    (review.BrojHelpful ?? 0) - 1);
+                    review.BrojHelpful - 1);
 
-                review.BrojUnhelpful =
-                    (review.BrojUnhelpful ?? 0) + 1;
+                review.BrojUnhelpful++;
             }
             else
             {
                 review.BrojUnhelpful = Math.Max(
                     0,
-                    (review.BrojUnhelpful ?? 0) - 1);
+                    review.BrojUnhelpful - 1);
 
-                review.BrojHelpful =
-                    (review.BrojHelpful ?? 0) + 1;
+                review.BrojHelpful++;
             }
 
             existingReaction.TipOcjene = request.ReactionType;
