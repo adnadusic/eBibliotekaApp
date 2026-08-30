@@ -29,7 +29,7 @@
     <section class="summary-grid">
       <article class="summary-card">
         <span class="summary-label">Books</span>
-        <strong>{{ totalBooks }}</strong>
+        <strong>{{ totalBooks | number }}</strong>
         <p>Total number of books in the library.</p>
 
         <a routerLink="/books">
@@ -39,7 +39,7 @@
 
       <article class="summary-card">
         <span class="summary-label">Notifications</span>
-        <strong>{{ unreadNotifications }}</strong>
+        <strong>{{ unreadNotifications | number }}</strong>
         <p>Number of currently unread notifications.</p>
 
         <a routerLink="/notifications">
@@ -49,7 +49,7 @@
 
       <article class="summary-card">
         <span class="summary-label">Priorities</span>
-        <strong>{{ priorityNotificationTypes }}</strong>
+        <strong>{{ priorityNotificationTypes | number }}</strong>
         <p>Number of notification types marked as priority.</p>
 
         <a routerLink="/notifications">

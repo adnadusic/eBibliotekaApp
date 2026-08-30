@@ -2,7 +2,9 @@
 using Market.API.Middleware;
 using Market.Application;
 using Market.Infrastructure;
+using Microsoft.AspNetCore.Localization;
 using Serilog;
+using System.Globalization;
 
 public partial class Program
 {
@@ -35,6 +37,20 @@ public partial class Program
                 .AddInfrastructure(builder.Configuration, builder.Environment)
                 .AddApplication();
 
+            const string defaultCultureName = "en-GB";
+            var supportedCultures = new[]
+            {
+                new CultureInfo(defaultCultureName)
+            };
+
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                options.DefaultRequestCulture =
+                    new RequestCulture(defaultCultureName);
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
+
             // Allow Angular development frontend
             builder.Services.AddCors(options =>
             {
@@ -54,6 +70,8 @@ public partial class Program
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseRequestLocalization();
 
             app.UseExceptionHandler();
             app.UseMiddleware<RequestResponseLoggingMiddleware>();

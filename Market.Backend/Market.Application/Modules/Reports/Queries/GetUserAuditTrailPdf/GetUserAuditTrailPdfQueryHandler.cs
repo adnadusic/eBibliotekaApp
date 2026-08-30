@@ -1,6 +1,7 @@
 ﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using System.Globalization;
 
 namespace Market.Application.Modules.Reports.Queries.GetUserAuditTrailPdf;
 
@@ -69,7 +70,8 @@ public sealed class GetUserAuditTrailPdfQueryHandler(
 
                         column.Item()
                             .Text(
-                                $"Period: {dateFrom:dd.MM.yyyy} - {request.DateTo.Date:dd.MM.yyyy}");
+                                $"Period: {dateFrom.ToString("d", CultureInfo.CurrentCulture)} - " +
+                                request.DateTo.Date.ToString("d", CultureInfo.CurrentCulture));
 
                         column.Item()
                             .Text(
@@ -120,7 +122,8 @@ public sealed class GetUserAuditTrailPdfQueryHandler(
 
                                     card.Item()
                                         .Text(
-                                            $"Time: {log.ChangedAtUtc:dd.MM.yyyy HH:mm:ss} UTC");
+                                            $"Time: {log.ChangedAtUtc.ToString("G", CultureInfo.CurrentCulture)} " +
+                                            "UTC");
 
                                     card.Item()
                                         .PaddingTop(5)

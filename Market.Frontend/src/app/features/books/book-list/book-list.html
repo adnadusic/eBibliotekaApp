@@ -160,10 +160,10 @@
               <td>{{ book.title }}</td>
               <td>{{ book.isbn }}</td>
               <td>{{ book.publicationYear ?? '—' }}</td>
-              <td>{{ book.pageCount ?? '—' }}</td>
+              <td>{{ book.pageCount == null ? '—' : (book.pageCount | number) }}</td>
               <td>{{ book.languageId }}</td>
               <td>{{ book.availableCopies ?? 0 }}</td>
-              <td>{{ book.averageRating ?? 0 }}</td>
+              <td>{{ (book.averageRating ?? 0) | number:'1.0-2' }}</td>
 
               <td class="row-actions">
                 <button
@@ -214,8 +214,8 @@
       </button>
 
       <span>
-        Page {{ page }} / {{ totalPages }}
-        · {{ total }} books total
+        Page {{ page | number }} / {{ totalPages | number }}
+        · {{ total | number }} books total
       </span>
 
       <button

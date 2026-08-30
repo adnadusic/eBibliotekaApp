@@ -1,6 +1,7 @@
 ﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using System.Globalization;
 
 namespace Market.Application.Modules.Reports.Queries.GetBookReviewsPdf;
 
@@ -74,7 +75,8 @@ public sealed class GetBookReviewsPdfQueryHandler(
 
                         column.Item()
                             .Text(
-                                $"Period: {dateFrom:dd.MM.yyyy} - {request.DateTo.Date:dd.MM.yyyy}");
+                                $"Period: {dateFrom.ToString("d", CultureInfo.CurrentCulture)} - " +
+                                request.DateTo.Date.ToString("d", CultureInfo.CurrentCulture));
 
                         column.Item()
                             .Text(
@@ -143,7 +145,8 @@ public sealed class GetBookReviewsPdfQueryHandler(
                                     table.Cell()
                                         .Text(
                                             review.CreatedAt.ToString(
-                                                "dd.MM.yyyy"));
+                                                "d",
+                                                CultureInfo.CurrentCulture));
                                 }
                             });
                     });

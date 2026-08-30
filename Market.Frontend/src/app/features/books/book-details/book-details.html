@@ -66,7 +66,7 @@
 
       <div class="detail-item">
         <span class="label">Page count</span>
-        <span>{{ book.pageCount ?? '—' }}</span>
+        <span>{{ book.pageCount == null ? '—' : (book.pageCount | number) }}</span>
       </div>
 
       <div class="detail-item">
@@ -95,7 +95,7 @@
 
       <div class="detail-item">
         <span class="label">Total copies</span>
-        <span>{{ book.totalCopies ?? 0 }}</span>
+        <span>{{ (book.totalCopies ?? 0) | number }}</span>
       </div>
 
       <div class="detail-item">
@@ -105,12 +105,12 @@
 
       <div class="detail-item">
         <span class="label">Average rating</span>
-        <span>{{ book.averageRating ?? 0 }}</span>
+        <span>{{ (book.averageRating ?? 0) | number:'1.0-2' }}</span>
       </div>
 
       <div class="detail-item">
         <span class="label">Rating count</span>
-        <span>{{ book.ratingCount ?? 0 }}</span>
+        <span>{{ (book.ratingCount ?? 0) | number }}</span>
       </div>
 
       <div class="detail-item">
@@ -230,7 +230,7 @@
                   <strong>{{ review.userName }}</strong>
 
                   <span class="review-date">
-                    {{ review.date | date:'dd.MM.yyyy. HH:mm' }}
+                    {{ review.date | date:'medium' }}
                   </span>
                 </div>
 
