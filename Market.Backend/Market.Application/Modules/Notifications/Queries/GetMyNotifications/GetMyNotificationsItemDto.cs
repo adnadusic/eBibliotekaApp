@@ -11,6 +11,4 @@ public sealed class GetMyNotificationsItemDto
     public DateTime SentAt { get; init; }
     public bool IsRead { get; init; }
     public DateTime? ReadAt { get; init; }
-    public int? RelatedId { get; init; }
-    public string? RelatedType { get; init; }
 }

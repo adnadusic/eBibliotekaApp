@@ -11,10 +11,8 @@ namespace Market.Domain.Entities.Catalog
         public string Naslov { get; set; }
         public string Poruka { get; set; }
         public DateTime DatumSlanja { get; set; }
-        public bool? Procitano { get; set; }
+        public bool Procitano { get; set; }
         public DateTime? DatumCitanja { get; set; }
-        public int? VezanoZaId { get; set; }
-        public string VezanoZaTip { get; set; }
 
         public MarketUserEntity User { get; set; }
     }

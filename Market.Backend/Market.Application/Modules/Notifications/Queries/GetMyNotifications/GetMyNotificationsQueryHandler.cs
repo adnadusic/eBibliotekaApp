@@ -34,7 +34,7 @@ public sealed class GetMyNotificationsQueryHandler(
         if (request.IsRead.HasValue)
         {
             query = query.Where(x =>
-                (x.Procitano ?? false) == request.IsRead.Value);
+                x.Procitano == request.IsRead.Value);
         }
 
         return await query
@@ -46,10 +46,8 @@ public sealed class GetMyNotificationsQueryHandler(
                 Title = x.Naslov,
                 Message = x.Poruka,
                 SentAt = x.DatumSlanja,
-                IsRead = x.Procitano ?? false,
-                ReadAt = x.DatumCitanja,
-                RelatedId = x.VezanoZaId,
-                RelatedType = x.VezanoZaTip
+                IsRead = x.Procitano,
+                ReadAt = x.DatumCitanja
             })
             .ToListAsync(ct);
     }
