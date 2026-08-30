@@ -20,7 +20,7 @@ public sealed class ReactToReviewCommandHandler(
 
         var userId = currentUser.UserId.Value;
 
-        var review = await ctx.Recenzije
+        var review = await ctx.Reviews
             .FirstOrDefaultAsync(
                 x => x.Id == request.ReviewId && !x.IsDeleted,
                 ct);
@@ -30,7 +30,7 @@ public sealed class ReactToReviewCommandHandler(
             throw new MarketNotFoundException("Review was not found.");
         }
 
-        var existingReaction = await ctx.OcjeneRecenzija
+        var existingReaction = await ctx.ReviewReactions
             .FirstOrDefaultAsync(
                 x =>
                     x.ReviewId == request.ReviewId &&
@@ -40,46 +40,46 @@ public sealed class ReactToReviewCommandHandler(
 
         if (existingReaction is null)
         {
-            var reaction = new OcjenaRecenzije
+            var reaction = new ReviewReaction
             {
                 UserId = userId,
                 ReviewId = request.ReviewId,
-                TipOcjene = request.ReactionType,
-                Datum = DateTime.UtcNow
+                ReactionType = request.ReactionType,
+                CreatedAt = DateTime.UtcNow
             };
 
-            ctx.OcjeneRecenzija.Add(reaction);
+            ctx.ReviewReactions.Add(reaction);
 
             if (request.ReactionType == ReviewRatingType.Helpful)
             {
-                review.BrojHelpful++;
+                review.HelpfulCount++;
             }
             else
             {
-                review.BrojUnhelpful++;
+                review.UnhelpfulCount++;
             }
         }
-        else if (existingReaction.TipOcjene != request.ReactionType)
+        else if (existingReaction.ReactionType != request.ReactionType)
         {
-            if (existingReaction.TipOcjene == ReviewRatingType.Helpful)
+            if (existingReaction.ReactionType == ReviewRatingType.Helpful)
             {
-                review.BrojHelpful = Math.Max(
+                review.HelpfulCount = Math.Max(
                     0,
-                    review.BrojHelpful - 1);
+                    review.HelpfulCount - 1);
 
-                review.BrojUnhelpful++;
+                review.UnhelpfulCount++;
             }
             else
             {
-                review.BrojUnhelpful = Math.Max(
+                review.UnhelpfulCount = Math.Max(
                     0,
-                    review.BrojUnhelpful - 1);
+                    review.UnhelpfulCount - 1);
 
-                review.BrojHelpful++;
+                review.HelpfulCount++;
             }
 
-            existingReaction.TipOcjene = request.ReactionType;
-            existingReaction.Datum = DateTime.UtcNow;
+            existingReaction.ReactionType = request.ReactionType;
+            existingReaction.CreatedAt = DateTime.UtcNow;
         }
 
         await ctx.SaveChangesAsync(ct);

@@ -12,8 +12,10 @@ public sealed class MarketUserEntity : BaseEntity
     public string LastName { get; set; }
     public string PhoneNumber { get; set; }
     public string Address { get; set; }
-    public int? GradId { get; set; }
-    public Grad? Grad { get; set; }
+
+    public int? CityId { get; set; }
+    public City? City { get; set; }
+
     public DateTime? DateOfBirth { get; set; }
 
     public bool IsAdmin { get; set; }

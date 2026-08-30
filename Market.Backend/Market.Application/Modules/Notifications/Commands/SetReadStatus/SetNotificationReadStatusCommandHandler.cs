@@ -17,7 +17,7 @@ public sealed class SetNotificationReadStatusCommandHandler(
 
         var userId = currentUser.UserId.Value;
 
-        var notification = await ctx.Obavijesti
+        var notification = await ctx.Notifications
             .FirstOrDefaultAsync(
                 x =>
                     x.Id == request.NotificationId &&
@@ -31,8 +31,8 @@ public sealed class SetNotificationReadStatusCommandHandler(
                 "Notification was not found.");
         }
 
-        notification.Procitano = request.IsRead;
-        notification.DatumCitanja =
+        notification.IsRead = request.IsRead;
+        notification.ReadAt =
             request.IsRead ? DateTime.UtcNow : null;
 
         await ctx.SaveChangesAsync(ct);

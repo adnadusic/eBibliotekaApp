@@ -15,7 +15,7 @@ public sealed class DeleteBookCommandHandler(
                 "Only administrators can delete books.");
         }
 
-        var book = await ctx.Knjige
+        var book = await ctx.Books
             .FirstOrDefaultAsync(
                 x => x.Id == request.Id && !x.IsDeleted,
                 ct)

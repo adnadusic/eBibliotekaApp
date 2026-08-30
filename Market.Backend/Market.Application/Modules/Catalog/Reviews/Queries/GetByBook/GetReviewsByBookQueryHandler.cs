@@ -7,7 +7,7 @@ public sealed class GetReviewsByBookQueryHandler(IAppDbContext ctx)
         GetReviewsByBookQuery request,
         CancellationToken ct)
     {
-        var bookExists = await ctx.Knjige
+        var bookExists = await ctx.Books
             .AnyAsync(
                 x => x.Id == request.BookId && !x.IsDeleted,
                 ct);
@@ -17,23 +17,23 @@ public sealed class GetReviewsByBookQueryHandler(IAppDbContext ctx)
             throw new MarketNotFoundException("Book was not found.");
         }
 
-        return await ctx.Recenzije
+        return await ctx.Reviews
             .AsNoTracking()
             .Where(x =>
                 x.BookId == request.BookId &&
                 !x.IsDeleted)
-            .OrderByDescending(x => x.Datum)
+            .OrderByDescending(x => x.CreatedAt)
             .Select(x => new GetReviewsByBookItemDto
             {
                 Id = x.Id,
                 UserId = x.UserId,
                 UserName = x.User.FirstName + " " + x.User.LastName,
-                Rating = x.Ocjena,
-                Title = x.Naslov,
-                Comment = x.Komentar,
-                Date = x.Datum,
-                HelpfulCount = x.BrojHelpful,
-                UnhelpfulCount = x.BrojUnhelpful
+                Rating = x.Rating,
+                Title = x.Title,
+                Comment = x.Comment,
+                Date = x.CreatedAt,
+                HelpfulCount = x.HelpfulCount,
+                UnhelpfulCount = x.UnhelpfulCount
             })
             .ToListAsync(ct);
     }

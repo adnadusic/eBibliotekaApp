@@ -19,27 +19,27 @@ public sealed class SetNotificationPriorityCommandHandler(
 
         var userId = currentUser.UserId.Value;
 
-        var setting = await ctx.PostavkeObavijesti
+        var setting = await ctx.NotificationSettings
             .FirstOrDefaultAsync(
                 x =>
                     x.UserId == userId &&
-                    x.Tip == request.Type,
+                    x.Type == request.Type,
                 ct);
 
         if (setting is null)
         {
-            setting = new PostavkaObavijesti
+            setting = new NotificationSetting
             {
                 UserId = userId,
-                Tip = request.Type,
-                Prioritetna = request.IsPriority
+                Type = request.Type,
+                IsPriority = request.IsPriority
             };
 
-            ctx.PostavkeObavijesti.Add(setting);
+            ctx.NotificationSettings.Add(setting);
         }
         else
         {
-            setting.Prioritetna = request.IsPriority;
+            setting.IsPriority = request.IsPriority;
             setting.IsDeleted = false;
         }
 

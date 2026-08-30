@@ -21,7 +21,7 @@ public sealed class GetMyNotificationSettingsQueryHandler(
 
         var userId = currentUser.UserId.Value;
 
-        var savedSettings = await ctx.PostavkeObavijesti
+        var savedSettings = await ctx.NotificationSettings
             .AsNoTracking()
             .Where(x =>
                 x.UserId == userId &&
@@ -33,12 +33,12 @@ public sealed class GetMyNotificationSettingsQueryHandler(
             .Select(type =>
             {
                 var setting = savedSettings
-                    .FirstOrDefault(x => x.Tip == type);
+                    .FirstOrDefault(x => x.Type == type);
 
                 return new GetMyNotificationSettingsItemDto
                 {
                     Type = type,
-                    IsPriority = setting?.Prioritetna ?? false
+                    IsPriority = setting?.IsPriority ?? false
                 };
             })
             .ToList();

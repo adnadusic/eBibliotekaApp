@@ -7,25 +7,27 @@ public partial class StaticDataSeeder
 {
     public static void Seed(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Grad>().HasData(
-            new Grad
+        modelBuilder.Entity<City>().HasData(
+            new City
             {
                 Id = 1,
-                Naziv = "Mostar",
-                PostanskiBroj = "88000",
+                Name = "Mostar",
+                PostalCode = "88000",
                 IsDeleted = false,
-                CreatedAtUtc = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                CreatedAtUtc = new DateTime(
+                    2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
             }
         );
 
-        modelBuilder.Entity<Jezik>().HasData(
-            new Jezik
+        modelBuilder.Entity<Language>().HasData(
+            new Language
             {
                 Id = 1,
-                Naziv = "Bosanski",
-                Kod = "bs",
+                Name = "Bosnian",
+                Code = "bs",
                 IsDeleted = false,
-                CreatedAtUtc = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                CreatedAtUtc = new DateTime(
+                    2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
             }
         );
     }

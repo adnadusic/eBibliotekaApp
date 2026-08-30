@@ -7,7 +7,7 @@ public sealed class GetPagedBooksQueryHandler(IAppDbContext ctx)
         GetPagedBooksQuery request,
         CancellationToken ct)
     {
-        var query = ctx.Knjige
+        var query = ctx.Books
             .AsNoTracking()
             .Where(x => !x.IsDeleted)
             .AsQueryable();
@@ -16,7 +16,7 @@ public sealed class GetPagedBooksQueryHandler(IAppDbContext ctx)
         {
             var title = request.Title.Trim();
 
-            query = query.Where(x => x.Naslov.Contains(title));
+            query = query.Where(x => x.Title.Contains(title));
         }
 
         if (!string.IsNullOrWhiteSpace(request.Isbn))
@@ -29,19 +29,19 @@ public sealed class GetPagedBooksQueryHandler(IAppDbContext ctx)
         if (request.AuthorId.HasValue)
         {
             query = query.Where(x =>
-                x.Autori.Any(a => a.AuthorId == request.AuthorId.Value));
+                x.Authors.Any(a => a.AuthorId == request.AuthorId.Value));
         }
 
         if (request.GenreId.HasValue)
         {
             query = query.Where(x =>
-                x.Zanrovi.Any(g => g.GenreId == request.GenreId.Value));
+                x.Genres.Any(g => g.GenreId == request.GenreId.Value));
         }
 
         if (request.LanguageId.HasValue)
         {
             query = query.Where(x =>
-                x.JezikId == request.LanguageId.Value);
+                x.LanguageId == request.LanguageId.Value);
         }
 
         var sortBy = request.SortBy.Trim().ToLowerInvariant();
@@ -57,30 +57,30 @@ public sealed class GetPagedBooksQueryHandler(IAppDbContext ctx)
                 : query.OrderBy(x => x.Isbn).ThenBy(x => x.Id),
 
             "publicationyear" => descending
-                ? query.OrderByDescending(x => x.GodinaIzdanja).ThenBy(x => x.Id)
-                : query.OrderBy(x => x.GodinaIzdanja).ThenBy(x => x.Id),
+                ? query.OrderByDescending(x => x.PublicationYear).ThenBy(x => x.Id)
+                : query.OrderBy(x => x.PublicationYear).ThenBy(x => x.Id),
 
             "pagecount" => descending
-                ? query.OrderByDescending(x => x.BrojStranica).ThenBy(x => x.Id)
-                : query.OrderBy(x => x.BrojStranica).ThenBy(x => x.Id),
+                ? query.OrderByDescending(x => x.PageCount).ThenBy(x => x.Id)
+                : query.OrderBy(x => x.PageCount).ThenBy(x => x.Id),
 
             _ => descending
-                ? query.OrderByDescending(x => x.Naslov).ThenBy(x => x.Id)
-                : query.OrderBy(x => x.Naslov).ThenBy(x => x.Id)
+                ? query.OrderByDescending(x => x.Title).ThenBy(x => x.Id)
+                : query.OrderBy(x => x.Title).ThenBy(x => x.Id)
         };
 
         var projectedQuery = query
             .Select(x => new GetPagedBooksItemDto
             {
                 Id = x.Id,
-                Title = x.Naslov,
+                Title = x.Title,
                 Isbn = x.Isbn,
-                PublicationYear = x.GodinaIzdanja,
-                PageCount = x.BrojStranica,
-                LanguageId = x.JezikId,
+                PublicationYear = x.PublicationYear,
+                PageCount = x.PageCount,
+                LanguageId = x.LanguageId,
                 PublisherId = x.PublisherId,
-                AvailableCopies = x.DostupnoPrimjeraka,
-                AverageRating = x.ProsjecnaOcjena
+                AvailableCopies = x.AvailableCopies,
+                AverageRating = x.AverageRating
             });
 
         return await PageResult<GetPagedBooksItemDto>
