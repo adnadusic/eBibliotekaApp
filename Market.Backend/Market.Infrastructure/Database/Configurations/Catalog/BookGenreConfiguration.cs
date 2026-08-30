@@ -9,6 +9,9 @@ public sealed class BookGenreConfiguration
 {
     public void Configure(EntityTypeBuilder<BookGenre> builder)
     {
+        // Preserve the existing database schema while using English domain names.
+        builder.ToTable("KnjigaZanrovi");
+
         builder.HasOne(x => x.Book)
             .WithMany(x => x.Genres)
             .HasForeignKey(x => x.BookId)

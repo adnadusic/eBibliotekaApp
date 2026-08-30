@@ -9,6 +9,15 @@ public sealed class ReviewReactionConfiguration
 {
     public void Configure(EntityTypeBuilder<ReviewReaction> builder)
     {
+        // Preserve the existing database schema while using English domain names.
+        builder.ToTable("OcjeneRecenzija");
+
+        builder.Property(x => x.ReactionType)
+            .HasColumnName("TipOcjene");
+
+        builder.Property(x => x.CreatedAt)
+            .HasColumnName("Datum");
+
         builder.HasOne(x => x.User)
             .WithMany()
             .HasForeignKey(x => x.UserId)

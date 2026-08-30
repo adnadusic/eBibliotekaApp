@@ -9,6 +9,12 @@ public sealed class BookAuthorConfiguration
 {
     public void Configure(EntityTypeBuilder<BookAuthor> builder)
     {
+        // Preserve the existing database schema while using English domain names.
+        builder.ToTable("KnjigaAutori");
+
+        builder.Property(x => x.ContributionType)
+            .HasColumnName("TipDoprinosa");
+
         builder.HasOne(x => x.Book)
             .WithMany(x => x.Authors)
             .HasForeignKey(x => x.BookId)
