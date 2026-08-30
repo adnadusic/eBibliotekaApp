@@ -25,7 +25,7 @@ public sealed class GetBookReviewsPdfQueryHandler(
 
         if (book is null)
         {
-            throw new InvalidOperationException(
+            throw new MarketNotFoundException(
                 "Book was not found.");
         }
 
