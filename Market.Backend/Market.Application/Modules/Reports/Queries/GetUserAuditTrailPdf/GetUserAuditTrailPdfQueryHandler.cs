@@ -59,13 +59,13 @@ public sealed class GetUserAuditTrailPdfQueryHandler(
                     .Column(column =>
                     {
                         column.Item()
-                            .Text("eBiblioteka - Audit Trail izvještaj")
+                            .Text("eBiblioteka - Audit Trail Report")
                             .SemiBold()
                             .FontSize(18);
 
                         column.Item()
                             .Text(
-                                $"Korisnik ID: {request.UserId}");
+                                $"User ID: {request.UserId}");
 
                         column.Item()
                             .Text(
@@ -73,7 +73,7 @@ public sealed class GetUserAuditTrailPdfQueryHandler(
 
                         column.Item()
                             .Text(
-                                $"Broj zapisa: {auditLogs.Count}");
+                                $"Number of records: {auditLogs.Count}");
                     });
 
                 page.Content()
@@ -86,7 +86,7 @@ public sealed class GetUserAuditTrailPdfQueryHandler(
                         {
                             column.Item()
                                 .Text(
-                                    "Nema Audit Trail zapisa za odabranog korisnika i period.");
+                                    "There are no Audit Trail records for the selected user and period.");
 
                             return;
                         }
@@ -116,15 +116,15 @@ public sealed class GetUserAuditTrailPdfQueryHandler(
 
                                     card.Item()
                                         .Text(
-                                            $"Korisnik: {log.UserEmail ?? "Sistem"}");
+                                            $"User: {log.UserEmail ?? "System"}");
 
                                     card.Item()
                                         .Text(
-                                            $"Vrijeme: {log.ChangedAtUtc:dd.MM.yyyy HH:mm:ss} UTC");
+                                            $"Time: {log.ChangedAtUtc:dd.MM.yyyy HH:mm:ss} UTC");
 
                                     card.Item()
                                         .PaddingTop(5)
-                                        .Text("Stare vrijednosti:")
+                                        .Text("Old values:")
                                         .SemiBold();
 
                                     card.Item()
@@ -135,7 +135,7 @@ public sealed class GetUserAuditTrailPdfQueryHandler(
 
                                     card.Item()
                                         .PaddingTop(5)
-                                        .Text("Nove vrijednosti:")
+                                        .Text("New values:")
                                         .SemiBold();
 
                                     card.Item()
@@ -151,7 +151,7 @@ public sealed class GetUserAuditTrailPdfQueryHandler(
                     .AlignCenter()
                     .Text(text =>
                     {
-                        text.Span("Stranica ");
+                        text.Span("Page ");
                         text.CurrentPageNumber();
                         text.Span(" / ");
                         text.TotalPages();

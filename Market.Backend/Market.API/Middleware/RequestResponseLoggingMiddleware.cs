@@ -20,16 +20,23 @@ public sealed class RequestResponseLoggingMiddleware(
 
         // Read request body (only for POST/PUT)
         string? requestBody = null;
+
         if (request.Method is "POST" or "PUT")
         {
             request.EnableBuffering();
-            using var reader = new StreamReader(request.Body, Encoding.UTF8, leaveOpen: true);
+
+            using var reader = new StreamReader(
+                request.Body,
+                Encoding.UTF8,
+                leaveOpen: true);
+
             requestBody = await reader.ReadToEndAsync();
             request.Body.Position = 0;
         }
 
         // Capture original response stream
         var originalBodyStream = context.Response.Body;
+
         await using var responseBody = new MemoryStream();
         context.Response.Body = responseBody;
 
@@ -41,9 +48,12 @@ public sealed class RequestResponseLoggingMiddleware(
         {
             stopwatch.Stop();
 
-            // read response text for logging
+            // Read response text for logging
             responseBody.Seek(0, SeekOrigin.Begin);
-            var responseText = await new StreamReader(responseBody).ReadToEndAsync();
+
+            var responseText = await new StreamReader(responseBody)
+                .ReadToEndAsync();
+
             responseBody.Seek(0, SeekOrigin.Begin);
 
             var logMessage = new StringBuilder()
@@ -51,38 +61,68 @@ public sealed class RequestResponseLoggingMiddleware(
                 .AppendLine($"  Path: {request.Path}")
                 .AppendLine($"  Method: {request.Method}")
                 .AppendLine($"  Status: {context.Response.StatusCode}")
-                .AppendLine($"  Duration: {stopwatch.ElapsedMilliseconds} ms");
+                .AppendLine(
+                    $"  Duration: {stopwatch.ElapsedMilliseconds} ms");
 
             if (!string.IsNullOrWhiteSpace(requestBody))
-                logMessage.AppendLine($"  Request Body: {requestBody}");
+            {
+                logMessage.AppendLine(
+                    $"  Request Body: {requestBody}");
+            }
 
             if (!string.IsNullOrWhiteSpace(responseText))
-                logMessage.AppendLine($"  Response Body: {responseText}");
+            {
+                logMessage.AppendLine(
+                    $"  Response Body: {responseText}");
+            }
 
             var elapsed = stopwatch.ElapsedMilliseconds;
+
             if (elapsed > SlowRequestThresholdMs)
             {
-                logger.LogWarning("[SLOW REQUEST] {Path} took {Elapsed} ms", request.Path, elapsed);
+                logger.LogWarning(
+                    "[SLOW REQUEST] {Path} took {Elapsed} ms",
+                    request.Path,
+                    elapsed);
 
-                // >>> Bugfix 27.10.2025: sigurno pisanje na disk (ne ruši response ako folder ne postoji)
+                // Bugfix 27.10.2025:
+                // Safely write to disk without breaking the response
+                // if the log directory does not exist.
                 try
                 {
-                    var logDir = Path.Combine(AppContext.BaseDirectory, "Logs");
+                    var logDir = Path.Combine(
+                        AppContext.BaseDirectory,
+                        "Logs");
+
                     Directory.CreateDirectory(logDir);
-                    var logPath = Path.Combine(logDir, "slow-requests.log");
-                    await File.AppendAllTextAsync(logPath, $"{DateTime.UtcNow:u} | {request.Path} | {elapsed} ms{Environment.NewLine}");
+
+                    var logPath = Path.Combine(
+                        logDir,
+                        "slow-requests.log");
+
+                    await File.AppendAllTextAsync(
+                        logPath,
+                        $"{DateTime.UtcNow:u} | {request.Path} | {elapsed} ms{Environment.NewLine}");
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex, "Failed writing slow-request log.");
+                    logger.LogError(
+                        ex,
+                        "Failed writing slow-request log.");
                 }
             }
 
-            logger.LogInformation("{Log}", logMessage.ToString());
+            logger.LogInformation(
+                "{Log}",
+                logMessage.ToString());
 
-            // >>> Bugfix 27.10.2025: KLJUČNO: vrati originalni stream i kopiraj tijelo nazad da se vidi json error poruka
+            // Bugfix 27.10.2025:
+            // Restore the original stream and copy the response body
+            // back so that the JSON error response reaches the client.
             context.Response.Body = originalBodyStream;
-            await responseBody.CopyToAsync(originalBodyStream);
+
+            await responseBody.CopyToAsync(
+                originalBodyStream);
         }
     }
 }

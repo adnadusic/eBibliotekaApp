@@ -17,7 +17,9 @@ public static class DynamicDataSeeder
     private static async Task SeedUsersAsync(DatabaseContext context)
     {
         if (await context.Users.AnyAsync())
+        {
             return;
+        }
 
         var hasher = new PasswordHasher<MarketUserEntity>();
 
@@ -41,7 +43,7 @@ public static class DynamicDataSeeder
             PasswordHash = hasher.HashPassword(null!, "User123!"),
 
             FirstName = "Demo",
-            LastName = "Korisnik",
+            LastName = "User",
             PhoneNumber = "000000001",
             Address = "e-Biblioteka",
 
@@ -78,11 +80,11 @@ public static class DynamicDataSeeder
             admin,
             user,
             dummyForSwagger,
-            dummyForTests
-        );
+            dummyForTests);
 
         await context.SaveChangesAsync();
 
-        Console.WriteLine("Dynamic seed: e-Biblioteka demo users added.");
+        Console.WriteLine(
+            "Dynamic seed: e-Biblioteka demo users added.");
     }
 }
