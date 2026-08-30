@@ -5,9 +5,9 @@ public sealed class GetMyNotificationsQueryHandler(
     IAppCurrentUser currentUser)
     : IRequestHandler<
         GetMyNotificationsQuery,
-        List<GetMyNotificationsItemDto>>
+        PageResult<GetMyNotificationsItemDto>>
 {
-    public async Task<List<GetMyNotificationsItemDto>> Handle(
+    public async Task<PageResult<GetMyNotificationsItemDto>> Handle(
         GetMyNotificationsQuery request,
         CancellationToken ct)
     {
@@ -19,7 +19,7 @@ public sealed class GetMyNotificationsQueryHandler(
 
         var userId = currentUser.UserId.Value;
 
-        var query = ctx.Obavijesti
+        var query = ctx.Notifications
             .AsNoTracking()
             .Where(x =>
                 x.UserId == userId &&
@@ -28,27 +28,30 @@ public sealed class GetMyNotificationsQueryHandler(
         if (request.Type.HasValue)
         {
             query = query.Where(x =>
-                x.Tip == request.Type.Value);
+                x.Type == request.Type.Value);
         }
 
         if (request.IsRead.HasValue)
         {
             query = query.Where(x =>
-                x.Procitano == request.IsRead.Value);
+                x.IsRead == request.IsRead.Value);
         }
 
-        return await query
-            .OrderByDescending(x => x.DatumSlanja)
+        var projectedQuery = query
+            .OrderByDescending(x => x.SentAt)
+            .ThenByDescending(x => x.Id)
             .Select(x => new GetMyNotificationsItemDto
             {
                 Id = x.Id,
-                Type = x.Tip,
-                Title = x.Naslov,
-                Message = x.Poruka,
-                SentAt = x.DatumSlanja,
-                IsRead = x.Procitano,
-                ReadAt = x.DatumCitanja
-            })
-            .ToListAsync(ct);
+                Type = x.Type,
+                Title = x.Title,
+                Message = x.Message,
+                SentAt = x.SentAt,
+                IsRead = x.IsRead,
+                ReadAt = x.ReadAt
+            });
+
+        return await PageResult<GetMyNotificationsItemDto>
+            .FromQueryableAsync(projectedQuery, request.Paging, ct);
     }
 }

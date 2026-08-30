@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
+import { PageResult } from './page-result';
 
 export interface NotificationItem {
   id: number;
@@ -39,7 +40,25 @@ export class NotificationsService {
     type?: number,
     isRead?: boolean
   ): Observable<NotificationItem[]> {
-    let params = new HttpParams();
+    return this.getMyNotificationsPage(
+      type,
+      isRead,
+      1,
+      100
+    ).pipe(
+      map((result) => result.items)
+    );
+  }
+
+  getMyNotificationsPage(
+    type?: number,
+    isRead?: boolean,
+    page = 1,
+    pageSize = 10
+  ): Observable<PageResult<NotificationItem>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
 
     if (type !== undefined) {
       params = params.set('type', type.toString());
@@ -49,7 +68,7 @@ export class NotificationsService {
       params = params.set('isRead', isRead.toString());
     }
 
-    return this.http.get<NotificationItem[]>(
+    return this.http.get<PageResult<NotificationItem>>(
       this.apiUrl,
       { params }
     );

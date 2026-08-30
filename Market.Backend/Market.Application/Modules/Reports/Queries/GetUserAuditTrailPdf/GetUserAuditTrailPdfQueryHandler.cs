@@ -1,24 +1,18 @@
 ﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using System.Globalization;
 
 namespace Market.Application.Modules.Reports.Queries.GetUserAuditTrailPdf;
 
 public sealed class GetUserAuditTrailPdfQueryHandler(
-    IAppDbContext ctx,
-    IAppCurrentUser currentUser)
+    IAppDbContext ctx)
     : IRequestHandler<GetUserAuditTrailPdfQuery, byte[]>
 {
     public async Task<byte[]> Handle(
         GetUserAuditTrailPdfQuery request,
         CancellationToken ct)
     {
-        if (!currentUser.IsAdmin)
-        {
-            throw new UnauthorizedAccessException(
-                "Only administrators can generate Audit Trail reports.");
-        }
-
         var dateFrom = request.DateFrom.Date;
         var dateToExclusive = request.DateTo.Date.AddDays(1);
 
@@ -59,21 +53,22 @@ public sealed class GetUserAuditTrailPdfQueryHandler(
                     .Column(column =>
                     {
                         column.Item()
-                            .Text("eBiblioteka - Audit Trail izvještaj")
+                            .Text("eBiblioteka - Audit Trail Report")
                             .SemiBold()
                             .FontSize(18);
 
                         column.Item()
                             .Text(
-                                $"Korisnik ID: {request.UserId}");
+                                $"User ID: {request.UserId}");
 
                         column.Item()
                             .Text(
-                                $"Period: {dateFrom:dd.MM.yyyy} - {request.DateTo.Date:dd.MM.yyyy}");
+                                $"Period: {dateFrom.ToString("d", CultureInfo.CurrentCulture)} - " +
+                                request.DateTo.Date.ToString("d", CultureInfo.CurrentCulture));
 
                         column.Item()
                             .Text(
-                                $"Broj zapisa: {auditLogs.Count}");
+                                $"Number of records: {auditLogs.Count}");
                     });
 
                 page.Content()
@@ -86,7 +81,7 @@ public sealed class GetUserAuditTrailPdfQueryHandler(
                         {
                             column.Item()
                                 .Text(
-                                    "Nema Audit Trail zapisa za odabranog korisnika i period.");
+                                    "There are no Audit Trail records for the selected user and period.");
 
                             return;
                         }
@@ -116,15 +111,16 @@ public sealed class GetUserAuditTrailPdfQueryHandler(
 
                                     card.Item()
                                         .Text(
-                                            $"Korisnik: {log.UserEmail ?? "Sistem"}");
+                                            $"User: {log.UserEmail ?? "System"}");
 
                                     card.Item()
                                         .Text(
-                                            $"Vrijeme: {log.ChangedAtUtc:dd.MM.yyyy HH:mm:ss} UTC");
+                                            $"Time: {log.ChangedAtUtc.ToString("G", CultureInfo.CurrentCulture)} " +
+                                            "UTC");
 
                                     card.Item()
                                         .PaddingTop(5)
-                                        .Text("Stare vrijednosti:")
+                                        .Text("Old values:")
                                         .SemiBold();
 
                                     card.Item()
@@ -135,7 +131,7 @@ public sealed class GetUserAuditTrailPdfQueryHandler(
 
                                     card.Item()
                                         .PaddingTop(5)
-                                        .Text("Nove vrijednosti:")
+                                        .Text("New values:")
                                         .SemiBold();
 
                                     card.Item()
@@ -151,7 +147,7 @@ public sealed class GetUserAuditTrailPdfQueryHandler(
                     .AlignCenter()
                     .Text(text =>
                     {
-                        text.Span("Stranica ");
+                        text.Span("Page ");
                         text.CurrentPageNumber();
                         text.Span(" / ");
                         text.TotalPages();

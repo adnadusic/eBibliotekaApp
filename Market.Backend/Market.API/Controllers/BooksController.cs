@@ -1,4 +1,5 @@
-﻿using Market.Application.Common;
+﻿using Market.API.Authorization;
+using Market.Application.Common;
 using Market.Application.Modules.Catalog.Books.Commands.Create;
 using Market.Application.Modules.Catalog.Books.Commands.Delete;
 using Market.Application.Modules.Catalog.Books.Commands.Update;
@@ -54,7 +55,7 @@ public sealed class BooksController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     public async Task<ActionResult<CreateBookCommandDto>> Create(
         [FromBody] CreateBookCommand command,
         CancellationToken ct)
@@ -68,7 +69,7 @@ public sealed class BooksController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
-    [Authorize]
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     public async Task<ActionResult<UpdateBookCommandDto>> Update(
         [FromBody] UpdateBookCommand command,
         CancellationToken ct)
@@ -77,7 +78,7 @@ public sealed class BooksController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    [Authorize]
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     public async Task<IActionResult> Delete(
         int id,
         CancellationToken ct)

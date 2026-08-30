@@ -6,32 +6,32 @@ public interface IAppDbContext
     DbSet<MarketUserEntity> Users { get; }
     DbSet<RefreshTokenEntity> RefreshTokens { get; }
 
-    DbSet<Knjiga> Knjige { get; set; }
-    DbSet<Autor> Autori { get; set; }
-    DbSet<Primjerak> Primjerci { get; set; }
-    DbSet<Izdavac> Izdavaci { get; set; }
-    DbSet<Zanr> Zanrovi { get; set; }
-    DbSet<Jezik> Jezici { get; set; }
-    DbSet<Grad> Gradovi { get; set; }
+    DbSet<Book> Books { get; set; }
+    DbSet<Author> Authors { get; set; }
+    DbSet<BookCopy> BookCopies { get; set; }
+    DbSet<Publisher> Publishers { get; set; }
+    DbSet<Genre> Genres { get; set; }
+    DbSet<Language> Languages { get; set; }
+    DbSet<City> Cities { get; set; }
 
-    DbSet<KnjigaAutor> KnjigaAutori { get; set; }
-    DbSet<KnjigaZanr> KnjigaZanrovi { get; set; }
+    DbSet<BookAuthor> BookAuthors { get; set; }
+    DbSet<BookGenre> BookGenres { get; set; }
 
-    DbSet<Rezervacija> Rezervacije { get; set; }
-    DbSet<Posudba> Posudbe { get; set; }
-    DbSet<Produzenje> Produzenja { get; set; }
+    DbSet<Reservation> Reservations { get; set; }
+    DbSet<Loan> Loans { get; set; }
+    DbSet<LoanExtension> LoanExtensions { get; set; }
 
-    DbSet<Recenzija> Recenzije { get; set; }
-    DbSet<OcjenaRecenzije> OcjeneRecenzija { get; set; }
+    DbSet<Review> Reviews { get; set; }
+    DbSet<ReviewReaction> ReviewReactions { get; set; }
 
-    DbSet<Kazna> Kazne { get; set; }
-    DbSet<ListaZelja> ListeZelja { get; set; }
-    DbSet<Obavijest> Obavijesti { get; set; }
-    DbSet<PostavkaObavijesti> PostavkeObavijesti { get; set; }
+    DbSet<Penalty> Penalties { get; set; }
+    DbSet<Wishlist> Wishlists { get; set; }
+    DbSet<Notification> Notifications { get; set; }
+    DbSet<NotificationSetting> NotificationSettings { get; set; }
     DbSet<AuditLog> AuditLogs { get; set; }
 
-    DbSet<SistemskePostavke> SistemskePostavke { get; set; }
-    DbSet<UpravljanjeKorisnicima> UpravljanjeKorisnicima { get; set; }
+    DbSet<SystemSetting> SystemSettings { get; set; }
+    DbSet<UserManagementLog> UserManagementLogs { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

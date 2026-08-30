@@ -1,3 +1,4 @@
+import { DecimalPipe } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
@@ -12,7 +13,7 @@ import { NotificationsService } from '../../core/services/notifications';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink],
+  imports: [RouterLink, DecimalPipe],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
@@ -42,9 +43,11 @@ export class DashboardPage implements OnInit {
         pageSize: 1,
       }),
       unreadNotifications:
-        this.notificationsService.getMyNotifications(
+        this.notificationsService.getMyNotificationsPage(
           undefined,
-          false
+          false,
+          1,
+          1
         ),
       notificationSettings:
         this.notificationsService.getMyNotificationSettings(),
@@ -52,7 +55,7 @@ export class DashboardPage implements OnInit {
       next: (result) => {
         this.totalBooks = result.books.total;
         this.unreadNotifications =
-          result.unreadNotifications.length;
+          result.unreadNotifications.total;
         this.priorityNotificationTypes =
           result.notificationSettings.filter(
             (setting) => setting.isPriority
@@ -65,7 +68,7 @@ export class DashboardPage implements OnInit {
         console.error(error);
 
         this.errorMessage =
-          'Učitavanje podataka za dashboard nije uspjelo.';
+          'Failed to load dashboard data.';
 
         this.loading = false;
         this.cdr.detectChanges();

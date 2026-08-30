@@ -21,23 +21,23 @@ export class SettingsPage implements OnInit {
   readonly notificationTypes = [
     {
       type: 1,
-      name: 'Rezervacije',
-      description: 'Obavijesti vezane za rezervacije knjiga.',
+      name: 'Reservations',
+      description: 'Notifications related to book reservations.',
     },
     {
       type: 2,
-      name: 'Posudbe',
-      description: 'Obavijesti vezane za aktivne posudbe.',
+      name: 'Loans',
+      description: 'Notifications related to active loans.',
     },
     {
       type: 3,
-      name: 'Kazne',
-      description: 'Obavijesti vezane za kazne i obaveze.',
+      name: 'Penalties',
+      description: 'Notifications related to penalties and obligations.',
     },
     {
       type: 4,
-      name: 'Opšte',
-      description: 'Opšte sistemske obavijesti.',
+      name: 'General',
+      description: 'General system notifications.',
     },
   ];
 
@@ -71,7 +71,7 @@ export class SettingsPage implements OnInit {
           console.error(error);
 
           this.errorMessage =
-            'Učitavanje postavki nije uspjelo.';
+            'Failed to load settings.';
 
           this.loading = false;
           this.cdr.detectChanges();
@@ -113,7 +113,7 @@ export class SettingsPage implements OnInit {
           }
 
           this.successMessage =
-            'Postavke su uspješno sačuvane.';
+            'Settings saved successfully.';
 
           this.savingType = undefined;
           this.cdr.detectChanges();
@@ -122,7 +122,7 @@ export class SettingsPage implements OnInit {
           console.error(error);
 
           this.errorMessage =
-            'Čuvanje postavke nije uspjelo.';
+            'Failed to save the setting.';
 
           this.savingType = undefined;
           this.cdr.detectChanges();

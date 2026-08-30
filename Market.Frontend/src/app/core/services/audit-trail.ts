@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
+import { PageResult } from './page-result';
 
 export interface AuditLogItem {
   id: number;
@@ -29,7 +30,25 @@ export class AuditTrailService {
     entityName?: string,
     action?: string
   ): Observable<AuditLogItem[]> {
-    let params = new HttpParams();
+    return this.getAuditLogsPage(
+      entityName,
+      action,
+      1,
+      100
+    ).pipe(
+      map((result) => result.items)
+    );
+  }
+
+  getAuditLogsPage(
+    entityName?: string,
+    action?: string,
+    page = 1,
+    pageSize = 10
+  ): Observable<PageResult<AuditLogItem>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
 
     if (entityName) {
       params = params.set(
@@ -45,7 +64,7 @@ export class AuditTrailService {
       );
     }
 
-    return this.http.get<AuditLogItem[]>(
+    return this.http.get<PageResult<AuditLogItem>>(
       this.apiUrl,
       { params }
     );

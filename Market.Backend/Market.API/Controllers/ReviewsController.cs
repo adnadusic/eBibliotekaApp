@@ -1,4 +1,5 @@
-﻿using Market.Application.Modules.Catalog.Reviews.Commands.Create;
+﻿using Market.Application.Common;
+using Market.Application.Modules.Catalog.Reviews.Commands.Create;
 using Market.Application.Modules.Catalog.Reviews.Commands.React;
 using Market.Application.Modules.Catalog.Reviews.Queries.GetByBook;
 
@@ -8,14 +9,21 @@ public sealed class ReviewsController(IMediator mediator) : ControllerBase
 {
     [HttpGet("book/{bookId:int}")]
     [AllowAnonymous]
-    public async Task<ActionResult<List<GetReviewsByBookItemDto>>> GetByBook(
+    public async Task<ActionResult<PageResult<GetReviewsByBookItemDto>>> GetByBook(
         int bookId,
-        CancellationToken ct)
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        CancellationToken ct = default)
     {
         var result = await mediator.Send(
             new GetReviewsByBookQuery
             {
-                BookId = bookId
+                BookId = bookId,
+                Paging = new PageRequest
+                {
+                    Page = Math.Max(1, page),
+                    PageSize = pageSize
+                }
             },
             ct);
 

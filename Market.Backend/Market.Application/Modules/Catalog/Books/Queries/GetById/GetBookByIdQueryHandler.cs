@@ -7,30 +7,30 @@ public sealed class GetBookByIdQueryHandler(IAppDbContext ctx)
         GetBookByIdQuery request,
         CancellationToken ct)
     {
-        var book = await ctx.Knjige
+        var book = await ctx.Books
             .AsNoTracking()
             .Where(x => x.Id == request.Id && !x.IsDeleted)
             .Select(x => new GetBookByIdDto
             {
                 Id = x.Id,
-                Title = x.Naslov,
+                Title = x.Title,
                 Isbn = x.Isbn,
-                PublicationYear = x.GodinaIzdanja,
-                PageCount = x.BrojStranica,
-                LanguageId = x.JezikId,
+                PublicationYear = x.PublicationYear,
+                PageCount = x.PageCount,
+                LanguageId = x.LanguageId,
                 PublisherId = x.PublisherId,
-                Description = x.Opis,
-                CoverImage = x.SlikaKorice,
-                TotalCopies = x.UkupnoPrimjeraka,
-                AvailableCopies = x.DostupnoPrimjeraka,
-                AverageRating = x.ProsjecnaOcjena,
-                RatingCount = x.BrojOcjena,
-                ViewCount = x.BrojPregleda,
-                AddedAt = x.DatumDodavanja,
-                AuthorIds = x.Autori
+                Description = x.Description,
+                CoverImage = x.CoverImage,
+                TotalCopies = x.TotalCopies,
+                AvailableCopies = x.AvailableCopies,
+                AverageRating = x.AverageRating,
+                RatingCount = x.RatingCount,
+                ViewCount = x.ViewCount,
+                AddedAt = x.AddedAt,
+                AuthorIds = x.Authors
                     .Select(a => a.AuthorId)
                     .ToList(),
-                GenreIds = x.Zanrovi
+                GenreIds = x.Genres
                     .Select(g => g.GenreId)
                     .ToList()
             })

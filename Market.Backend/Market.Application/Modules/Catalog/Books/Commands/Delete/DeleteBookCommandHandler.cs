@@ -1,21 +1,14 @@
 ﻿using Market.Application.Modules.Catalog.Books.Commands.Delete;
 
 public sealed class DeleteBookCommandHandler(
-    IAppDbContext ctx,
-    IAppCurrentUser currentUser)
+    IAppDbContext ctx)
     : IRequestHandler<DeleteBookCommand>
 {
     public async Task Handle(
         DeleteBookCommand request,
         CancellationToken ct)
     {
-        if (!currentUser.IsAdmin)
-        {
-            throw new UnauthorizedAccessException(
-                "Only administrators can delete books.");
-        }
-
-        var book = await ctx.Knjige
+        var book = await ctx.Books
             .FirstOrDefaultAsync(
                 x => x.Id == request.Id && !x.IsDeleted,
                 ct)

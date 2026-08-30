@@ -3,44 +3,47 @@ using Market.Domain.Entities.Catalog;
 using Market.Domain.Enums;
 
 public sealed class CreateBookCommandHandler(
-    IAppDbContext ctx,
-    IAppCurrentUser currentUser)
+    IAppDbContext ctx)
     : IRequestHandler<CreateBookCommand, CreateBookCommandDto>
 {
     public async Task<CreateBookCommandDto> Handle(
         CreateBookCommand request,
         CancellationToken ct)
     {
-        if (!currentUser.IsAdmin)
-        {
-            throw new UnauthorizedAccessException(
-                "Only administrators can create books.");
-        }
-
         var isbn = request.Isbn.Trim();
 
-        var isbnExists = await ctx.Knjige
-            .AnyAsync(x => x.Isbn == isbn && !x.IsDeleted, ct);
+        // ISBN remains reserved even after a book is soft deleted, matching
+        // the database-wide unique ISBN constraint. Ignore the global
+        // soft-delete filter so deleted books are included in the check.
+        var isbnExists = await ctx.Books
+            .IgnoreQueryFilters()
+            .AnyAsync(x => x.Isbn == isbn, ct);
 
         if (isbnExists)
+        {
             throw new MarketConflictException(
                 "A book with the same ISBN already exists.");
+        }
 
-        var languageExists = await ctx.Jezici
+        var languageExists = await ctx.Languages
             .AnyAsync(x => x.Id == request.LanguageId && !x.IsDeleted, ct);
 
         if (!languageExists)
+        {
             throw new MarketNotFoundException("Language was not found.");
+        }
 
         if (request.PublisherId.HasValue)
         {
-            var publisherExists = await ctx.Izdavaci
+            var publisherExists = await ctx.Publishers
                 .AnyAsync(
                     x => x.Id == request.PublisherId.Value && !x.IsDeleted,
                     ct);
 
             if (!publisherExists)
+            {
                 throw new MarketNotFoundException("Publisher was not found.");
+            }
         }
 
         var authorIds = request.AuthorIds
@@ -49,14 +52,16 @@ public sealed class CreateBookCommandHandler(
 
         if (authorIds.Count > 0)
         {
-            var existingAuthorIds = await ctx.Autori
+            var existingAuthorIds = await ctx.Authors
                 .Where(x => authorIds.Contains(x.Id) && !x.IsDeleted)
                 .Select(x => x.Id)
                 .ToListAsync(ct);
 
             if (existingAuthorIds.Count != authorIds.Count)
+            {
                 throw new MarketNotFoundException(
                     "One or more authors were not found.");
+            }
         }
 
         var genreIds = request.GenreIds
@@ -65,55 +70,59 @@ public sealed class CreateBookCommandHandler(
 
         if (genreIds.Count > 0)
         {
-            var existingGenreIds = await ctx.Zanrovi
+            var existingGenreIds = await ctx.Genres
                 .Where(x => genreIds.Contains(x.Id) && !x.IsDeleted)
                 .Select(x => x.Id)
                 .ToListAsync(ct);
 
             if (existingGenreIds.Count != genreIds.Count)
+            {
                 throw new MarketNotFoundException(
                     "One or more genres were not found.");
+            }
         }
 
-        var book = new Knjiga
+        var book = new Book
         {
-            Naslov = request.Title.Trim(),
+            Title = request.Title.Trim(),
             Isbn = isbn,
-            GodinaIzdanja = request.PublicationYear,
-            BrojStranica = request.PageCount,
-            JezikId = request.LanguageId,
+            PublicationYear = request.PublicationYear,
+            PageCount = request.PageCount,
+            LanguageId = request.LanguageId,
             PublisherId = request.PublisherId,
-            Opis = request.Description?.Trim() ?? string.Empty,
-            SlikaKorice = request.CoverImage?.Trim() ?? string.Empty,
-            UkupnoPrimjeraka = 0,
-            DostupnoPrimjeraka = 0,
-            ProsjecnaOcjena = 0,
-            BrojOcjena = 0,
-            BrojPregleda = 0,
-            DatumDodavanja = DateTime.UtcNow,
-            Autori = authorIds
-                .Select(authorId => new KnjigaAutor
+            Description = request.Description?.Trim() ?? string.Empty,
+            CoverImage = request.CoverImage?.Trim() ?? string.Empty,
+            TotalCopies = 0,
+            AvailableCopies = 0,
+            AverageRating = 0,
+            RatingCount = 0,
+            ViewCount = 0,
+            AddedAt = DateTime.UtcNow,
+
+            Authors = authorIds
+                .Select(authorId => new BookAuthor
                 {
                     AuthorId = authorId,
-                    TipDoprinosa = ContributionType.Author
+                    ContributionType = ContributionType.Author
                 })
                 .ToList(),
-            Zanrovi = genreIds
-                .Select(genreId => new KnjigaZanr
+
+            Genres = genreIds
+                .Select(genreId => new BookGenre
                 {
                     GenreId = genreId
                 })
                 .ToList()
         };
 
-        ctx.Knjige.Add(book);
+        ctx.Books.Add(book);
 
         await ctx.SaveChangesAsync(ct);
 
         return new CreateBookCommandDto
         {
             Id = book.Id,
-            Title = book.Naslov,
+            Title = book.Title,
             Isbn = book.Isbn
         };
     }

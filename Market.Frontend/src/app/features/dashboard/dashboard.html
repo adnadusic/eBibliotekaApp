@@ -3,19 +3,19 @@
     <div>
       <h1>Dashboard</h1>
       <p>
-        Pregled najvažnijih informacija i brz pristup funkcionalnostima
-        eBiblioteke.
+        Overview of the most important information and quick access to
+        eBiblioteka features.
       </p>
     </div>
 
     <a routerLink="/books" class="primary-button">
-      Pregledaj knjige
+      Browse books
     </a>
   </div>
 
   @if (loading) {
     <div class="message">
-      Učitavanje podataka...
+      Loading data...
     </div>
   }
 
@@ -28,59 +28,59 @@
   @if (!loading) {
     <section class="summary-grid">
       <article class="summary-card">
-        <span class="summary-label">Knjige</span>
-        <strong>{{ totalBooks }}</strong>
-        <p>Ukupan broj knjiga u biblioteci.</p>
+        <span class="summary-label">Books</span>
+        <strong>{{ totalBooks | number }}</strong>
+        <p>Total number of books in the library.</p>
 
         <a routerLink="/books">
-          Otvori knjige
+          Open books
         </a>
       </article>
 
       <article class="summary-card">
-        <span class="summary-label">Notifikacije</span>
-        <strong>{{ unreadNotifications }}</strong>
-        <p>Broj trenutno nepročitanih notifikacija.</p>
+        <span class="summary-label">Notifications</span>
+        <strong>{{ unreadNotifications | number }}</strong>
+        <p>Number of currently unread notifications.</p>
 
         <a routerLink="/notifications">
-          Otvori notifikacije
+          Open notifications
         </a>
       </article>
 
       <article class="summary-card">
-        <span class="summary-label">Prioriteti</span>
-        <strong>{{ priorityNotificationTypes }}</strong>
-        <p>Broj tipova notifikacija označenih kao prioritetni.</p>
+        <span class="summary-label">Priorities</span>
+        <strong>{{ priorityNotificationTypes | number }}</strong>
+        <p>Number of notification types marked as priority.</p>
 
         <a routerLink="/notifications">
-          Upravljaj prioritetima
+          Manage priorities
         </a>
       </article>
     </section>
   }
 
   <section class="quick-links">
-    <h2>Brzi pristup</h2>
+    <h2>Quick access</h2>
 
     <div class="quick-links-grid">
       <a routerLink="/books">
-        <strong>Knjige</strong>
-        <span>Pregled, pretraga i upravljanje knjigama.</span>
+        <strong>Books</strong>
+        <span>Browse, search, and manage books.</span>
       </a>
 
       <a routerLink="/notifications">
-        <strong>Notifikacije</strong>
-        <span>Pregled statusa i prioritetnih obavijesti.</span>
+        <strong>Notifications</strong>
+        <span>View status and priority notifications.</span>
       </a>
 
       <a routerLink="/audit-trail">
         <strong>Audit Trail</strong>
-        <span>Pregled evidentiranih promjena u sistemu.</span>
+        <span>View recorded changes in the system.</span>
       </a>
 
       <a routerLink="/reports">
-        <strong>PDF izvještaji</strong>
-        <span>Generisanje izvještaja sa parametrima.</span>
+        <strong>PDF Reports</strong>
+        <span>Generate reports using selected parameters.</span>
       </a>
     </div>
   </section>

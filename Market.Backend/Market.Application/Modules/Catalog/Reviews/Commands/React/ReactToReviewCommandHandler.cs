@@ -20,7 +20,7 @@ public sealed class ReactToReviewCommandHandler(
 
         var userId = currentUser.UserId.Value;
 
-        var review = await ctx.Recenzije
+        var review = await ctx.Reviews
             .FirstOrDefaultAsync(
                 x => x.Id == request.ReviewId && !x.IsDeleted,
                 ct);
@@ -30,7 +30,7 @@ public sealed class ReactToReviewCommandHandler(
             throw new MarketNotFoundException("Review was not found.");
         }
 
-        var existingReaction = await ctx.OcjeneRecenzija
+        var existingReaction = await ctx.ReviewReactions
             .FirstOrDefaultAsync(
                 x =>
                     x.ReviewId == request.ReviewId &&
@@ -40,46 +40,60 @@ public sealed class ReactToReviewCommandHandler(
 
         if (existingReaction is null)
         {
-            var reaction = new OcjenaRecenzije
+            var reaction = new ReviewReaction
             {
                 UserId = userId,
                 ReviewId = request.ReviewId,
-                TipOcjene = request.ReactionType,
-                Datum = DateTime.UtcNow
+                ReactionType = request.ReactionType,
+                CreatedAt = DateTime.UtcNow
             };
 
-            ctx.OcjeneRecenzija.Add(reaction);
+            ctx.ReviewReactions.Add(reaction);
 
-            if (request.ReactionType == ReviewRatingType.Helpful)
+            switch (request.ReactionType)
             {
-                review.BrojHelpful++;
-            }
-            else
-            {
-                review.BrojUnhelpful++;
+                case ReviewRatingType.Helpful:
+                    review.HelpfulCount++;
+                    break;
+                case ReviewRatingType.Unhelpful:
+                    review.UnhelpfulCount++;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(
+                        nameof(request.ReactionType),
+                        request.ReactionType,
+                        "Unsupported review reaction type.");
             }
         }
-        else if (existingReaction.TipOcjene != request.ReactionType)
+        else if (existingReaction.ReactionType != request.ReactionType)
         {
-            if (existingReaction.TipOcjene == ReviewRatingType.Helpful)
+            switch (existingReaction.ReactionType, request.ReactionType)
             {
-                review.BrojHelpful = Math.Max(
-                    0,
-                    review.BrojHelpful - 1);
+                case (ReviewRatingType.Helpful, ReviewRatingType.Unhelpful):
+                    review.HelpfulCount = Math.Max(
+                        0,
+                        review.HelpfulCount - 1);
 
-                review.BrojUnhelpful++;
+                    review.UnhelpfulCount++;
+                    break;
+
+                case (ReviewRatingType.Unhelpful, ReviewRatingType.Helpful):
+                    review.UnhelpfulCount = Math.Max(
+                        0,
+                        review.UnhelpfulCount - 1);
+
+                    review.HelpfulCount++;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(
+                        nameof(request.ReactionType),
+                        request.ReactionType,
+                        "Unsupported review reaction transition.");
             }
-            else
-            {
-                review.BrojUnhelpful = Math.Max(
-                    0,
-                    review.BrojUnhelpful - 1);
 
-                review.BrojHelpful++;
-            }
-
-            existingReaction.TipOcjene = request.ReactionType;
-            existingReaction.Datum = DateTime.UtcNow;
+            existingReaction.ReactionType = request.ReactionType;
+            existingReaction.CreatedAt = DateTime.UtcNow;
         }
 
         await ctx.SaveChangesAsync(ct);

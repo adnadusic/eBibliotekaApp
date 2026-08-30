@@ -19,7 +19,7 @@ public sealed class CreateReviewCommandHandler(
 
         var userId = currentUser.UserId.Value;
 
-        var book = await ctx.Knjige
+        var book = await ctx.Books
             .FirstOrDefaultAsync(
                 x => x.Id == request.BookId && !x.IsDeleted,
                 ct);
@@ -29,7 +29,7 @@ public sealed class CreateReviewCommandHandler(
             throw new MarketNotFoundException("Book was not found.");
         }
 
-        var reviewExists = await ctx.Recenzije
+        var reviewExists = await ctx.Reviews
             .AnyAsync(
                 x =>
                     x.BookId == request.BookId &&
@@ -43,32 +43,32 @@ public sealed class CreateReviewCommandHandler(
                 "You have already reviewed this book.");
         }
 
-        var review = new Recenzija
+        var review = new Review
         {
             UserId = userId,
             BookId = request.BookId,
-            Ocjena = request.Rating,
-            Naslov = request.Title.Trim(),
-            Komentar = request.Comment.Trim(),
-            Datum = DateTime.UtcNow,
-            BrojHelpful = 0,
-            BrojUnhelpful = 0,
-            Izmijenjeno = false,
-            DatumIzmjene = null
+            Rating = request.Rating,
+            Title = request.Title.Trim(),
+            Comment = request.Comment.Trim(),
+            CreatedAt = DateTime.UtcNow,
+            HelpfulCount = 0,
+            UnhelpfulCount = 0,
+            IsEdited = false,
+            EditedAt = null
         };
 
-        ctx.Recenzije.Add(review);
+        ctx.Reviews.Add(review);
 
-        var currentRatingCount = book.BrojOcjena;
-        var currentAverageRating = book.ProsjecnaOcjena;
+        var currentRatingCount = book.RatingCount;
+        var currentAverageRating = book.AverageRating;
 
         var newRatingCount = currentRatingCount + 1;
 
-        book.ProsjecnaOcjena =
+        book.AverageRating =
             ((currentAverageRating * currentRatingCount) + request.Rating)
             / newRatingCount;
 
-        book.BrojOcjena = newRatingCount;
+        book.RatingCount = newRatingCount;
 
         await ctx.SaveChangesAsync(ct);
 
@@ -77,10 +77,10 @@ public sealed class CreateReviewCommandHandler(
             Id = review.Id,
             BookId = review.BookId,
             UserId = review.UserId,
-            Rating = review.Ocjena,
-            Title = review.Naslov,
-            Comment = review.Komentar,
-            Date = review.Datum
+            Rating = review.Rating,
+            Title = review.Title,
+            Comment = review.Comment,
+            Date = review.CreatedAt
         };
     }
 }

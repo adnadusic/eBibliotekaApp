@@ -1,6 +1,7 @@
 ﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using System.Globalization;
 
 namespace Market.Application.Modules.Reports.Queries.GetBookReviewsPdf;
 
@@ -12,40 +13,40 @@ public sealed class GetBookReviewsPdfQueryHandler(
         GetBookReviewsPdfQuery request,
         CancellationToken ct)
     {
-        var book = await ctx.Knjige
+        var book = await ctx.Books
             .AsNoTracking()
             .Where(x => x.Id == request.BookId)
             .Select(x => new
             {
                 x.Id,
-                x.Naslov
+                x.Title
             })
             .FirstOrDefaultAsync(ct);
 
         if (book is null)
         {
-            throw new InvalidOperationException(
+            throw new MarketNotFoundException(
                 "Book was not found.");
         }
 
         var dateFrom = request.DateFrom.Date;
         var dateToExclusive = request.DateTo.Date.AddDays(1);
 
-        var reviews = await ctx.Recenzije
+        var reviews = await ctx.Reviews
             .AsNoTracking()
             .Where(x =>
                 x.BookId == request.BookId &&
-                x.Datum >= dateFrom &&
-                x.Datum < dateToExclusive)
-            .OrderByDescending(x => x.Datum)
+                x.CreatedAt >= dateFrom &&
+                x.CreatedAt < dateToExclusive)
+            .OrderByDescending(x => x.CreatedAt)
             .Select(x => new
             {
                 x.Id,
                 x.UserId,
-                x.Ocjena,
-                x.Naslov,
-                x.Komentar,
-                x.Datum
+                x.Rating,
+                x.Title,
+                x.Comment,
+                x.CreatedAt
             })
             .ToListAsync(ct);
 
@@ -65,20 +66,21 @@ public sealed class GetBookReviewsPdfQueryHandler(
                     .Column(column =>
                     {
                         column.Item()
-                            .Text("eBiblioteka - Izvještaj recenzija")
+                            .Text("eBiblioteka - Review Report")
                             .SemiBold()
                             .FontSize(18);
 
                         column.Item()
-                            .Text($"Knjiga: {book.Naslov}");
+                            .Text($"Book: {book.Title}");
 
                         column.Item()
                             .Text(
-                                $"Period: {dateFrom:dd.MM.yyyy} - {request.DateTo.Date:dd.MM.yyyy}");
+                                $"Period: {dateFrom.ToString("d", CultureInfo.CurrentCulture)} - " +
+                                request.DateTo.Date.ToString("d", CultureInfo.CurrentCulture));
 
                         column.Item()
                             .Text(
-                                $"Broj recenzija: {reviews.Count}");
+                                $"Number of reviews: {reviews.Count}");
                     });
 
                 page.Content()
@@ -89,7 +91,7 @@ public sealed class GetBookReviewsPdfQueryHandler(
                         {
                             column.Item()
                                 .Text(
-                                    "Nema recenzija za odabrani period.");
+                                    "There are no reviews for the selected period.");
 
                             return;
                         }
@@ -111,10 +113,10 @@ public sealed class GetBookReviewsPdfQueryHandler(
                                 {
                                     header.Cell().Text("ID").SemiBold();
                                     header.Cell().Text("User").SemiBold();
-                                    header.Cell().Text("Ocjena").SemiBold();
-                                    header.Cell().Text("Naslov").SemiBold();
-                                    header.Cell().Text("Komentar").SemiBold();
-                                    header.Cell().Text("Datum").SemiBold();
+                                    header.Cell().Text("Rating").SemiBold();
+                                    header.Cell().Text("Title").SemiBold();
+                                    header.Cell().Text("Comment").SemiBold();
+                                    header.Cell().Text("Date").SemiBold();
                                 });
 
                                 foreach (var review in reviews)
@@ -126,24 +128,25 @@ public sealed class GetBookReviewsPdfQueryHandler(
                                         .Text(review.UserId.ToString());
 
                                     table.Cell()
-                                        .Text(review.Ocjena.ToString());
+                                        .Text(review.Rating.ToString());
 
                                     table.Cell()
                                         .Text(
-                                            string.IsNullOrWhiteSpace(review.Naslov)
+                                            string.IsNullOrWhiteSpace(review.Title)
                                                 ? "-"
-                                                : review.Naslov);
+                                                : review.Title);
 
                                     table.Cell()
                                         .Text(
-                                            string.IsNullOrWhiteSpace(review.Komentar)
+                                            string.IsNullOrWhiteSpace(review.Comment)
                                                 ? "-"
-                                                : review.Komentar);
+                                                : review.Comment);
 
                                     table.Cell()
                                         .Text(
-                                            review.Datum.ToString(
-                                                "dd.MM.yyyy"));
+                                            review.CreatedAt.ToString(
+                                                "d",
+                                                CultureInfo.CurrentCulture));
                                 }
                             });
                     });
@@ -152,7 +155,7 @@ public sealed class GetBookReviewsPdfQueryHandler(
                     .AlignCenter()
                     .Text(text =>
                     {
-                        text.Span("Stranica ");
+                        text.Span("Page ");
                         text.CurrentPageNumber();
                         text.Span(" / ");
                         text.TotalPages();

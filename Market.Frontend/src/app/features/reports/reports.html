@@ -1,9 +1,9 @@
 <section class="reports-page">
   <div class="page-header">
-    <h1>PDF izvještaji</h1>
+    <h1>PDF Reports</h1>
 
     <p>
-      Generisanje izvještaja prema odabranim parametrima.
+      Generate reports using the selected parameters.
     </p>
   </div>
 
@@ -16,11 +16,11 @@
   <div class="reports-grid">
     <article class="report-card">
       <h2>
-        Izvještaj recenzija knjige
+        Book reviews report
       </h2>
 
       <p>
-        Generiše PDF sa recenzijama odabrane knjige za zadani period.
+        Generates a PDF with reviews for the selected book and date range.
       </p>
 
       <div class="form-group">
@@ -39,7 +39,7 @@
 
       <div class="form-group">
         <label for="bookDateFrom">
-          Datum od
+          Date from
         </label>
 
         <input
@@ -52,7 +52,7 @@
 
       <div class="form-group">
         <label for="bookDateTo">
-          Datum do
+          Date to
         </label>
 
         <input
@@ -69,20 +69,21 @@
         [disabled]="bookReportLoading"
       >
         @if (bookReportLoading) {
-          Generisanje...
+          Generating...
         } @else {
-          Preuzmi PDF
+          Download PDF
         }
       </button>
     </article>
 
+    @if (isAdmin) {
     <article class="report-card">
       <h2>
-        Audit Trail izvještaj
+        Audit Trail report
       </h2>
 
       <p>
-        Generiše PDF sa Audit Trail zapisima odabranog korisnika za zadani period.
+        Generates a PDF with Audit Trail entries for the selected user and date range.
       </p>
 
       <div class="form-group">
@@ -101,7 +102,7 @@
 
       <div class="form-group">
         <label for="auditDateFrom">
-          Datum od
+          Date from
         </label>
 
         <input
@@ -114,7 +115,7 @@
 
       <div class="form-group">
         <label for="auditDateTo">
-          Datum do
+          Date to
         </label>
 
         <input
@@ -131,11 +132,12 @@
         [disabled]="auditReportLoading"
       >
         @if (auditReportLoading) {
-          Generisanje...
+          Generating...
         } @else {
-          Preuzmi PDF
+          Download PDF
         }
       </button>
     </article>
+    }
   </div>
 </section>

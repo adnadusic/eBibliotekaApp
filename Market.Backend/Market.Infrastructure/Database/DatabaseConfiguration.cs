@@ -265,15 +265,30 @@ public partial class DatabaseContext
 
         ApplyAuditAndSoftDelete();
 
-        var result = base.SaveChanges();
+        var ownsTransaction = Database.CurrentTransaction is null;
+        using var transaction = ownsTransaction
+            ? Database.BeginTransaction()
+            : null;
 
-        if (pendingAuditLogs.Count > 0)
+        try
         {
-            SaveAuditLogs(pendingAuditLogs);
-            base.SaveChanges();
-        }
+            var result = base.SaveChanges();
 
-        return result;
+            if (pendingAuditLogs.Count > 0)
+            {
+                SaveAuditLogs(pendingAuditLogs);
+                base.SaveChanges();
+            }
+
+            transaction?.Commit();
+
+            return result;
+        }
+        catch
+        {
+            transaction?.Rollback();
+            throw;
+        }
     }
 
     public override async Task<int> SaveChangesAsync(
@@ -283,18 +298,41 @@ public partial class DatabaseContext
 
         ApplyAuditAndSoftDelete();
 
-        var result =
-            await base.SaveChangesAsync(cancellationToken);
+        var ownsTransaction = Database.CurrentTransaction is null;
+        await using var transaction = ownsTransaction
+            ? await Database.BeginTransactionAsync(cancellationToken)
+            : null;
 
-        if (pendingAuditLogs.Count > 0)
+        try
         {
-            SaveAuditLogs(pendingAuditLogs);
+            var result =
+                await base.SaveChangesAsync(cancellationToken);
 
-            await base.SaveChangesAsync(
-                cancellationToken);
+            if (pendingAuditLogs.Count > 0)
+            {
+                SaveAuditLogs(pendingAuditLogs);
+
+                await base.SaveChangesAsync(
+                    cancellationToken);
+            }
+
+            if (transaction is not null)
+            {
+                await transaction.CommitAsync(cancellationToken);
+            }
+
+            return result;
         }
+        catch
+        {
+            if (transaction is not null)
+            {
+                await transaction.RollbackAsync(
+                    CancellationToken.None);
+            }
 
-        return result;
+            throw;
+        }
     }
 
     private sealed record PendingAuditLog(

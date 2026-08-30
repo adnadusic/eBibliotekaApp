@@ -38,14 +38,17 @@ public sealed class UserEntityConfiguration : IEntityTypeConfiguration<MarketUse
         b.Property(x => x.IsEnabled)
             .HasDefaultValue(true);
 
+        b.Property(x => x.CityId)
+            .HasColumnName("GradId");
+
         // Navigation
         b.HasMany(x => x.RefreshTokens)
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId);
 
-        b.HasOne(x => x.Grad)
+        b.HasOne(x => x.City)
             .WithMany()
-            .HasForeignKey(x => x.GradId)
+            .HasForeignKey(x => x.CityId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Restrict);
     }
