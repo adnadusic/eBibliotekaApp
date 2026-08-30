@@ -50,32 +50,46 @@ public sealed class ReactToReviewCommandHandler(
 
             ctx.ReviewReactions.Add(reaction);
 
-            if (request.ReactionType == ReviewRatingType.Helpful)
+            switch (request.ReactionType)
             {
-                review.HelpfulCount++;
-            }
-            else
-            {
-                review.UnhelpfulCount++;
+                case ReviewRatingType.Helpful:
+                    review.HelpfulCount++;
+                    break;
+                case ReviewRatingType.Unhelpful:
+                    review.UnhelpfulCount++;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(
+                        nameof(request.ReactionType),
+                        request.ReactionType,
+                        "Unsupported review reaction type.");
             }
         }
         else if (existingReaction.ReactionType != request.ReactionType)
         {
-            if (existingReaction.ReactionType == ReviewRatingType.Helpful)
+            switch (existingReaction.ReactionType, request.ReactionType)
             {
-                review.HelpfulCount = Math.Max(
-                    0,
-                    review.HelpfulCount - 1);
+                case (ReviewRatingType.Helpful, ReviewRatingType.Unhelpful):
+                    review.HelpfulCount = Math.Max(
+                        0,
+                        review.HelpfulCount - 1);
 
-                review.UnhelpfulCount++;
-            }
-            else
-            {
-                review.UnhelpfulCount = Math.Max(
-                    0,
-                    review.UnhelpfulCount - 1);
+                    review.UnhelpfulCount++;
+                    break;
 
-                review.HelpfulCount++;
+                case (ReviewRatingType.Unhelpful, ReviewRatingType.Helpful):
+                    review.UnhelpfulCount = Math.Max(
+                        0,
+                        review.UnhelpfulCount - 1);
+
+                    review.HelpfulCount++;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(
+                        nameof(request.ReactionType),
+                        request.ReactionType,
+                        "Unsupported review reaction transition.");
             }
 
             existingReaction.ReactionType = request.ReactionType;
