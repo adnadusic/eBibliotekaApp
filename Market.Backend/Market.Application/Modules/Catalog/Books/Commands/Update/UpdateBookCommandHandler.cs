@@ -19,6 +19,22 @@ public sealed class UpdateBookCommandHandler(
             ?? throw new MarketNotFoundException(
                 "Book was not found.");
 
+        var isbn = request.Isbn.Trim();
+
+        // Keep ISBN reserved across soft deletes and exclude the book that is
+        // currently being updated from the duplicate check.
+        var isbnExists = await ctx.Books
+            .IgnoreQueryFilters()
+            .AnyAsync(
+                x => x.Id != book.Id && x.Isbn == isbn,
+                ct);
+
+        if (isbnExists)
+        {
+            throw new MarketConflictException(
+                "A book with the same ISBN already exists.");
+        }
+
         var languageExists = await ctx.Languages
             .AnyAsync(
                 x => x.Id == request.LanguageId && !x.IsDeleted,
@@ -89,7 +105,7 @@ public sealed class UpdateBookCommandHandler(
         }
 
         book.Title = request.Title.Trim();
-        book.Isbn = request.Isbn.Trim();
+        book.Isbn = isbn;
         book.PublicationYear = request.PublicationYear;
         book.PageCount = request.PageCount;
         book.LanguageId = request.LanguageId;

@@ -12,8 +12,12 @@ public sealed class CreateBookCommandHandler(
     {
         var isbn = request.Isbn.Trim();
 
+        // ISBN remains reserved even after a book is soft deleted, matching
+        // the database-wide unique ISBN constraint. Ignore the global
+        // soft-delete filter so deleted books are included in the check.
         var isbnExists = await ctx.Books
-            .AnyAsync(x => x.Isbn == isbn && !x.IsDeleted, ct);
+            .IgnoreQueryFilters()
+            .AnyAsync(x => x.Isbn == isbn, ct);
 
         if (isbnExists)
         {
