@@ -39,8 +39,8 @@ export class Login {
         console.error(error);
         this.errorMessage =
           error?.status === 404 || error?.status === 409
-            ? 'Pogrešan email ili lozinka.'
-            : 'Prijava trenutno nije uspjela.';
+            ? 'Incorrect email or password.'
+            : 'Login is currently unavailable.';
         this.submitting = false;
       },
     });

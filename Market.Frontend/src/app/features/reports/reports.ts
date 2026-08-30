@@ -73,7 +73,7 @@ export class ReportsPage {
       !this.bookDateTo
     ) {
       this.errorMessage =
-        'Unesite Book ID i period za izvještaj.';
+        'Enter a Book ID and date range for the report.';
 
       return;
     }
@@ -100,7 +100,7 @@ export class ReportsPage {
           console.error(error);
 
           this.errorMessage =
-            'Generisanje PDF izvještaja recenzija nije uspjelo.';
+            'Failed to generate the book reviews PDF report.';
 
           this.bookReportLoading = false;
           this.cdr.detectChanges();
@@ -117,7 +117,7 @@ export class ReportsPage {
       !this.auditDateTo
     ) {
       this.errorMessage =
-        'Unesite User ID i period za izvještaj.';
+        'Enter a User ID and date range for the report.';
 
       return;
     }
@@ -144,7 +144,7 @@ export class ReportsPage {
           console.error(error);
 
           this.errorMessage =
-            'Generisanje Audit Trail PDF izvještaja nije uspjelo.';
+            'Failed to generate the Audit Trail PDF report.';
 
           this.auditReportLoading = false;
           this.cdr.detectChanges();

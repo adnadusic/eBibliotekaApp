@@ -83,7 +83,7 @@ export class NotificationsPage implements OnInit {
           console.error(error);
 
           this.errorMessage =
-            'Učitavanje notifikacija nije uspjelo.';
+            'Failed to load notifications.';
 
           this.loading = false;
           this.cdr.detectChanges();
@@ -106,7 +106,7 @@ export class NotificationsPage implements OnInit {
           console.error(error);
 
           this.errorMessage =
-            'Učitavanje postavki notifikacija nije uspjelo.';
+            'Failed to load notification settings.';
 
           this.settingsLoading = false;
           this.cdr.detectChanges();
@@ -151,7 +151,7 @@ export class NotificationsPage implements OnInit {
           console.error(error);
 
           this.errorMessage =
-            'Promjena prioritetne postavke nije uspjela.';
+            'Failed to update the priority setting.';
 
           this.cdr.detectChanges();
         },
@@ -206,7 +206,7 @@ export class NotificationsPage implements OnInit {
           console.error(error);
 
           this.errorMessage =
-            'Promjena statusa notifikacije nije uspjela.';
+            'Failed to update the notification status.';
 
           this.cdr.detectChanges();
         },

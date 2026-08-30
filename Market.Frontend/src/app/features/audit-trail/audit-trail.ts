@@ -56,7 +56,7 @@ export class AuditTrailPage implements OnInit {
           console.error(error);
 
           this.errorMessage =
-            'Učitavanje Audit Trail zapisa nije uspjelo.';
+            'Failed to load Audit Trail entries.';
 
           this.loading = false;
           this.cdr.detectChanges();

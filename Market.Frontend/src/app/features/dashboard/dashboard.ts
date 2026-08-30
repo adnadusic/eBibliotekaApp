@@ -65,7 +65,7 @@ export class DashboardPage implements OnInit {
         console.error(error);
 
         this.errorMessage =
-          'Učitavanje podataka za dashboard nije uspjelo.';
+          'Failed to load dashboard data.';
 
         this.loading = false;
         this.cdr.detectChanges();

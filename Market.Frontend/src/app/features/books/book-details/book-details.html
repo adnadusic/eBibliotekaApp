@@ -1,6 +1,6 @@
 <section class="details-page">
   @if (loading) {
-    <p class="status-message">Učitavanje detalja knjige...</p>
+    <p class="status-message">Loading book details...</p>
   }
 
   @if (errorMessage) {
@@ -13,7 +13,7 @@
       class="secondary-button"
       (click)="backToList()"
     >
-      Nazad na knjige
+      Back to books
     </button>
   }
 
@@ -21,7 +21,7 @@
     <div class="page-header">
       <div>
         <h1>{{ book.title }}</h1>
-        <p>Detalji knjige</p>
+        <p>Book details</p>
       </div>
 
       <div class="header-actions">
@@ -30,7 +30,7 @@
           class="secondary-button"
           (click)="backToList()"
         >
-          Nazad
+          Back
         </button>
 
         <button
@@ -38,7 +38,7 @@
           class="primary-button"
           (click)="editBook()"
         >
-          Uredi
+          Edit
         </button>
       </div>
     </div>
@@ -50,7 +50,7 @@
       </div>
 
       <div class="detail-item">
-        <span class="label">Naslov</span>
+        <span class="label">Title</span>
         <span>{{ book.title }}</span>
       </div>
 
@@ -60,108 +60,108 @@
       </div>
 
       <div class="detail-item">
-        <span class="label">Godina izdanja</span>
+        <span class="label">Publication year</span>
         <span>{{ book.publicationYear ?? '—' }}</span>
       </div>
 
       <div class="detail-item">
-        <span class="label">Broj stranica</span>
+        <span class="label">Page count</span>
         <span>{{ book.pageCount ?? '—' }}</span>
       </div>
 
       <div class="detail-item">
-        <span class="label">Jezik ID</span>
+        <span class="label">Language ID</span>
         <span>{{ book.languageId }}</span>
       </div>
 
       <div class="detail-item">
-        <span class="label">Izdavač ID</span>
+        <span class="label">Publisher ID</span>
         <span>{{ book.publisherId ?? '—' }}</span>
       </div>
 
       <div class="detail-item">
-        <span class="label">Autor ID</span>
+        <span class="label">Author ID</span>
         <span>
           {{ book.authorIds.length ? book.authorIds.join(', ') : '—' }}
         </span>
       </div>
 
       <div class="detail-item">
-        <span class="label">Žanr ID</span>
+        <span class="label">Genre ID</span>
         <span>
           {{ book.genreIds.length ? book.genreIds.join(', ') : '—' }}
         </span>
       </div>
 
       <div class="detail-item">
-        <span class="label">Ukupno primjeraka</span>
+        <span class="label">Total copies</span>
         <span>{{ book.totalCopies ?? 0 }}</span>
       </div>
 
       <div class="detail-item">
-        <span class="label">Dostupno primjeraka</span>
+        <span class="label">Available copies</span>
         <span>{{ book.availableCopies ?? 0 }}</span>
       </div>
 
       <div class="detail-item">
-        <span class="label">Prosječna ocjena</span>
+        <span class="label">Average rating</span>
         <span>{{ book.averageRating ?? 0 }}</span>
       </div>
 
       <div class="detail-item">
-        <span class="label">Broj ocjena</span>
+        <span class="label">Rating count</span>
         <span>{{ book.ratingCount ?? 0 }}</span>
       </div>
 
       <div class="detail-item">
-        <span class="label">Broj pregleda</span>
+        <span class="label">View count</span>
         <span>{{ book.viewCount ?? 0 }}</span>
       </div>
 
       <div class="detail-item full-width">
-        <span class="label">Opis</span>
+        <span class="label">Description</span>
         <span>{{ book.description || '—' }}</span>
       </div>
 
       <div class="detail-item full-width">
-        <span class="label">Slika korice</span>
+        <span class="label">Cover image</span>
         <span>{{ book.coverImage || '—' }}</span>
       </div>
     </div>
 
     <section class="reviews-section">
-      <h2>Ocjene i recenzije</h2>
+      <h2>Ratings and reviews</h2>
 
       <form
         class="review-form"
         [formGroup]="reviewForm"
         (ngSubmit)="submitReview()"
       >
-        <h3>Dodaj recenziju</h3>
+        <h3>Add review</h3>
 
         <div class="review-field">
-          <label for="rating">Ocjena</label>
+          <label for="rating">Rating</label>
 
           <select
             id="rating"
             formControlName="rating"
           >
-            <option [ngValue]="5">5 - Odlično</option>
-            <option [ngValue]="4">4 - Vrlo dobro</option>
-            <option [ngValue]="3">3 - Dobro</option>
-            <option [ngValue]="2">2 - Dovoljno</option>
-            <option [ngValue]="1">1 - Loše</option>
+            <option [ngValue]="5">5 - Excellent</option>
+            <option [ngValue]="4">4 - Very good</option>
+            <option [ngValue]="3">3 - Good</option>
+            <option [ngValue]="2">2 - Fair</option>
+            <option [ngValue]="1">1 - Poor</option>
           </select>
         </div>
 
         <div class="review-field">
-          <label for="reviewTitle">Naslov recenzije</label>
+          <label for="reviewTitle">Review title</label>
 
           <input
             id="reviewTitle"
             type="text"
             formControlName="title"
-            placeholder="Unesite naslov recenzije"
+            placeholder="Enter a review title"
           />
 
           @if (
@@ -169,19 +169,19 @@
             reviewForm.controls.title.invalid
           ) {
             <span class="validation-message">
-              Naslov recenzije je obavezan.
+              Review title is required.
             </span>
           }
         </div>
 
         <div class="review-field">
-          <label for="reviewComment">Komentar</label>
+          <label for="reviewComment">Comment</label>
 
           <textarea
             id="reviewComment"
             rows="5"
             formControlName="comment"
-            placeholder="Napišite svoje mišljenje o knjizi"
+            placeholder="Write your opinion about the book"
           ></textarea>
 
           @if (
@@ -189,7 +189,7 @@
             reviewForm.controls.comment.invalid
           ) {
             <span class="validation-message">
-              Komentar je obavezan.
+              Comment is required.
             </span>
           }
         </div>
@@ -199,7 +199,7 @@
           class="primary-button"
           [disabled]="submittingReview"
         >
-          {{ submittingReview ? 'Spremanje...' : 'Objavi recenziju' }}
+          {{ submittingReview ? 'Saving...' : 'Publish review' }}
         </button>
       </form>
 
@@ -216,10 +216,10 @@
       }
 
       <div class="reviews-list">
-        <h3>Recenzije korisnika</h3>
+        <h3>User reviews</h3>
 
         @if (reviewsLoading) {
-          <p class="status-message">Učitavanje recenzija...</p>
+          <p class="status-message">Loading reviews...</p>
         }
 
         @if (!reviewsLoading) {
@@ -235,7 +235,7 @@
                 </div>
 
                 <span class="review-rating">
-                  Ocjena: {{ review.rating }} / 5
+                  Rating: {{ review.rating }} / 5
                 </span>
               </div>
 
@@ -249,7 +249,7 @@
                   class="reaction-button"
                   (click)="reactToReview(review.id, 1)"
                 >
-                  Korisno
+                  Helpful
                   ({{ review.helpfulCount }})
                 </button>
 
@@ -258,14 +258,14 @@
                   class="reaction-button"
                   (click)="reactToReview(review.id, 2)"
                 >
-                  Nije korisno
+                  Not helpful
                   ({{ review.unhelpfulCount }})
                 </button>
               </div>
             </article>
           } @empty {
             <p class="empty-reviews">
-              Ova knjiga još nema recenzija.
+              This book has no reviews yet.
             </p>
           }
         }

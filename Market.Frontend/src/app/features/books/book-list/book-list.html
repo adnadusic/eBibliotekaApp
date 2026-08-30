@@ -1,8 +1,8 @@
 <section class="books-page">
   <div class="page-header">
     <div>
-      <h1>Knjige</h1>
-      <p>Pregled i pretraga knjiga u e-Biblioteci.</p>
+      <h1>Books</h1>
+      <p>Browse and search books in eBiblioteka.</p>
     </div>
 
     @if (isAdmin) {
@@ -11,7 +11,7 @@
         class="primary-action"
         (click)="createBook()"
       >
-        Dodaj knjigu
+        Add book
       </button>
     }
   </div>
@@ -22,12 +22,12 @@
     (ngSubmit)="applyFilters()"
   >
     <div class="filter-field">
-      <label for="title">Naslov</label>
+      <label for="title">Title</label>
       <input
         id="title"
         type="text"
         formControlName="title"
-        placeholder="Pretraži po naslovu"
+        placeholder="Search by title"
       />
     </div>
 
@@ -37,58 +37,58 @@
         id="isbn"
         type="text"
         formControlName="isbn"
-        placeholder="Pretraži po ISBN-u"
+        placeholder="Search by ISBN"
       />
     </div>
 
     <div class="filter-field">
-      <label for="authorId">Autor ID</label>
+      <label for="authorId">Author ID</label>
       <input
         id="authorId"
         type="number"
         min="1"
         formControlName="authorId"
-        placeholder="npr. 1"
+        placeholder="e.g. 1"
       />
     </div>
 
     <div class="filter-field">
-      <label for="genreId">Žanr ID</label>
+      <label for="genreId">Genre ID</label>
       <input
         id="genreId"
         type="number"
         min="1"
         formControlName="genreId"
-        placeholder="npr. 1"
+        placeholder="e.g. 1"
       />
     </div>
 
     <div class="filter-field">
-      <label for="languageId">Jezik ID</label>
+      <label for="languageId">Language ID</label>
       <input
         id="languageId"
         type="number"
         min="1"
         formControlName="languageId"
-        placeholder="npr. 1"
+        placeholder="e.g. 1"
       />
     </div>
 
     <div class="filter-actions">
-      <button type="submit">Filtriraj</button>
+      <button type="submit">Filter</button>
 
       <button
         type="button"
         class="secondary"
         (click)="resetFilters()"
       >
-        Resetuj
+        Reset
       </button>
     </div>
   </form>
 
   @if (loading) {
-    <p class="status-message">Učitavanje knjiga...</p>
+    <p class="status-message">Loading books...</p>
   }
 
   @if (errorMessage) {
@@ -108,7 +108,7 @@
                 class="sort-button"
                 (click)="sortByColumn('title')"
               >
-                Naslov
+                Title
                 <span>{{ getSortIndicator('title') }}</span>
               </button>
             </th>
@@ -130,7 +130,7 @@
                 class="sort-button"
                 (click)="sortByColumn('publicationYear')"
               >
-                Godina
+                Year
                 <span>{{ getSortIndicator('publicationYear') }}</span>
               </button>
             </th>
@@ -141,15 +141,15 @@
                 class="sort-button"
                 (click)="sortByColumn('pageCount')"
               >
-                Broj stranica
+                Page count
                 <span>{{ getSortIndicator('pageCount') }}</span>
               </button>
             </th>
 
-            <th>Jezik</th>
-            <th>Dostupno</th>
-            <th>Ocjena</th>
-            <th>Akcije</th>
+            <th>Language</th>
+            <th>Available</th>
+            <th>Rating</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
@@ -171,7 +171,7 @@
                   class="details-button"
                   (click)="viewBook(book.id)"
                 >
-                  Detalji
+                  Details
                 </button>
 
                 @if (isAdmin) {
@@ -180,7 +180,7 @@
                     class="edit-button"
                     (click)="editBook(book.id)"
                   >
-                    Uredi
+                    Edit
                   </button>
 
                   <button
@@ -188,7 +188,7 @@
                     class="delete-button"
                     (click)="deleteBook(book)"
                   >
-                    Obriši
+                    Delete
                   </button>
                 }
               </td>
@@ -196,7 +196,7 @@
           } @empty {
             <tr>
               <td colspan="9" class="empty-state">
-                Nema pronađenih knjiga.
+                No books found.
               </td>
             </tr>
           }
@@ -210,12 +210,12 @@
         (click)="previousPage()"
         [disabled]="page <= 1"
       >
-        Prethodna
+        Previous
       </button>
 
       <span>
-        Stranica {{ page }} / {{ totalPages }}
-        · ukupno {{ total }} knjiga
+        Page {{ page }} / {{ totalPages }}
+        · {{ total }} books total
       </span>
 
       <button
@@ -223,7 +223,7 @@
         (click)="nextPage()"
         [disabled]="page >= totalPages"
       >
-        Sljedeća
+        Next
       </button>
     </div>
   }
@@ -238,16 +238,16 @@
         (click)="$event.stopPropagation()"
       >
         <h2 id="delete-modal-title">
-          Potvrda brisanja
+          Confirm deletion
         </h2>
 
         <p>
-          Da li sigurno želiš obrisati knjigu
+          Are you sure you want to delete the book
           <strong>"{{ bookPendingDelete.title }}"</strong>?
         </p>
 
         <p class="modal-warning">
-          Ovu akciju nije moguće poništiti.
+          This action cannot be undone.
         </p>
 
         <div class="modal-actions">
@@ -256,7 +256,7 @@
             class="cancel-button"
             (click)="cancelDelete()"
           >
-            Odustani
+            Cancel
           </button>
 
           <button
@@ -264,7 +264,7 @@
             class="confirm-delete-button"
             (click)="confirmDelete()"
           >
-            Obriši
+            Delete
           </button>
         </div>
       </div>

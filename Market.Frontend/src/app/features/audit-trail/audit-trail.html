@@ -4,7 +4,7 @@
       <h1>Audit Trail</h1>
 
       <p>
-        Pregled promjena u sistemu.
+        Overview of changes in the system.
       </p>
     </div>
   </div>
@@ -12,7 +12,7 @@
   <div class="audit-filters">
     <div class="filter-group">
       <label for="entityFilter">
-        Entitet
+        Entity
       </label>
 
       <select
@@ -20,46 +20,46 @@
         (change)="onEntityFilterChange($event)"
       >
         <option value="">
-          Svi entiteti
+          All entities
         </option>
 
-        <option value="Knjiga">
-          Knjiga
+        <option value="Book">
+          Book
         </option>
 
-        <option value="Recenzija">
-          Recenzija
+        <option value="Review">
+          Review
         </option>
 
-        <option value="OcjenaRecenzije">
-          Ocjena recenzije
+        <option value="ReviewReaction">
+          Review reaction
         </option>
 
-        <option value="Obavijest">
-          Obavijest
+        <option value="Notification">
+          Notification
         </option>
 
-        <option value="PostavkaObavijesti">
-          Postavka obavijesti
+        <option value="NotificationSetting">
+          Notification setting
         </option>
 
-        <option value="Rezervacija">
-          Rezervacija
+        <option value="Reservation">
+          Reservation
         </option>
 
-        <option value="Posudba">
-          Posudba
+        <option value="Loan">
+          Loan
         </option>
 
-        <option value="Kazna">
-          Kazna
+        <option value="Penalty">
+          Penalty
         </option>
       </select>
     </div>
 
     <div class="filter-group">
       <label for="actionFilter">
-        Akcija
+        Action
       </label>
 
       <select
@@ -67,19 +67,19 @@
         (change)="onActionFilterChange($event)"
       >
         <option value="">
-          Sve akcije
+          All actions
         </option>
 
         <option value="Create">
-          Kreiranje
+          Create
         </option>
 
         <option value="Update">
-          Izmjena
+          Update
         </option>
 
         <option value="Delete">
-          Brisanje
+          Delete
         </option>
       </select>
     </div>
@@ -87,7 +87,7 @@
 
   @if (loading) {
     <p class="status-message">
-      Učitavanje Audit Trail zapisa...
+      Loading Audit Trail entries...
     </p>
   }
 
@@ -108,18 +108,18 @@
               </h2>
 
               <p>
-                ID entiteta:
+                Entity ID:
                 {{ log.entityId ?? '-' }}
               </p>
             </div>
 
             <span class="action-badge">
               @if (log.action === 'Create') {
-                Kreiranje
+                Create
               } @else if (log.action === 'Update') {
-                Izmjena
+                Update
               } @else if (log.action === 'Delete') {
-                Brisanje
+                Delete
               } @else {
                 {{ log.action }}
               }
@@ -128,8 +128,8 @@
 
           <div class="audit-meta">
             <p>
-              <strong>Korisnik:</strong>
-              {{ log.userEmail ?? 'Sistem' }}
+              <strong>User:</strong>
+              {{ log.userEmail ?? 'System' }}
             </p>
 
             <p>
@@ -138,7 +138,7 @@
             </p>
 
             <p>
-              <strong>Vrijeme:</strong>
+              <strong>Time:</strong>
               {{ log.changedAtUtc | date:'dd.MM.yyyy. HH:mm' }}
             </p>
           </div>
@@ -146,7 +146,7 @@
           <div class="audit-values">
             <div class="audit-values-column">
               <h3>
-                Stare vrijednosti
+                Old values
               </h3>
 
               <pre>{{ formatValues(log.oldValues) }}</pre>
@@ -154,7 +154,7 @@
 
             <div class="audit-values-column">
               <h3>
-                Nove vrijednosti
+                New values
               </h3>
 
               <pre>{{ formatValues(log.newValues) }}</pre>
@@ -163,7 +163,7 @@
         </article>
       } @empty {
         <p class="empty-state">
-          Nema Audit Trail zapisa za odabrane filtere.
+          No Audit Trail entries match the selected filters.
         </p>
       }
     </div>

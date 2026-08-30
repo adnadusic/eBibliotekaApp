@@ -75,7 +75,7 @@ export class BookDetailsPage implements OnInit {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
     if (id <= 0) {
-      this.errorMessage = 'Neispravan ID knjige.';
+      this.errorMessage = 'Invalid book ID.';
       return;
     }
 
@@ -97,10 +97,10 @@ export class BookDetailsPage implements OnInit {
         console.error(error);
 
         if (error?.status === 404) {
-          this.errorMessage = 'Knjiga nije pronađena.';
+          this.errorMessage = 'Book not found.';
         } else {
           this.errorMessage =
-            'Učitavanje detalja knjige nije uspjelo.';
+            'Failed to load book details.';
         }
 
         this.loading = false;
@@ -123,7 +123,7 @@ export class BookDetailsPage implements OnInit {
         console.error(error);
 
         this.reviewErrorMessage =
-          'Učitavanje recenzija nije uspjelo.';
+          'Failed to load reviews.';
 
         this.reviewsLoading = false;
         this.cdr.detectChanges();
@@ -165,7 +165,7 @@ export class BookDetailsPage implements OnInit {
           });
 
           this.reviewSuccessMessage =
-            'Recenzija je uspješno dodana.';
+            'Review added successfully.';
 
           this.submittingReview = false;
 
@@ -179,13 +179,13 @@ export class BookDetailsPage implements OnInit {
 
           if (error?.status === 401) {
             this.reviewErrorMessage =
-              'Morate biti prijavljeni da biste ostavili recenziju.';
+              'You must be signed in to leave a review.';
           } else if (error?.status === 409) {
             this.reviewErrorMessage =
-              'Već ste ostavili recenziju za ovu knjigu.';
+              'You have already reviewed this book.';
           } else {
             this.reviewErrorMessage =
-              'Dodavanje recenzije nije uspjelo.';
+              'Failed to add the review.';
           }
 
           this.submittingReview = false;
@@ -220,10 +220,10 @@ export class BookDetailsPage implements OnInit {
 
           if (error?.status === 401) {
             this.reviewErrorMessage =
-              'Morate biti prijavljeni da biste reagovali na recenziju.';
+              'You must be signed in to react to a review.';
           } else {
             this.reviewErrorMessage =
-              'Reakcija na recenziju nije uspjela.';
+              'Failed to react to the review.';
           }
 
           this.cdr.detectChanges();

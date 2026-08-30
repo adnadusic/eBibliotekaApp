@@ -1,24 +1,24 @@
 <section class="notifications-page">
   <div class="page-header">
     <div>
-      <h1>Notifikacije</h1>
+      <h1>Notifications</h1>
 
       <p>
-        Nepročitane: {{ unreadCount }}
+        Unread: {{ unreadCount }}
       </p>
     </div>
   </div>
 
   <div class="priority-settings">
-    <h2>Prioritetne notifikacije</h2>
+    <h2>Priority notifications</h2>
 
     <p>
-      Odaberi koje tipove notifikacija želiš označiti kao prioritetne.
+      Choose which notification types should be marked as priority.
     </p>
 
     @if (settingsLoading) {
       <p class="status-message">
-        Učitavanje postavki...
+        Loading settings...
       </p>
     } @else {
       <div class="priority-options">
@@ -28,10 +28,10 @@
           [class.active]="isPriority(1)"
           (click)="togglePriority(1)"
         >
-          Rezervacije
+          Reservations
 
           @if (isPriority(1)) {
-            <span>★ Prioritetno</span>
+            <span>★ Priority</span>
           }
         </button>
 
@@ -41,10 +41,10 @@
           [class.active]="isPriority(2)"
           (click)="togglePriority(2)"
         >
-          Posudbe
+          Loans
 
           @if (isPriority(2)) {
-            <span>★ Prioritetno</span>
+            <span>★ Priority</span>
           }
         </button>
 
@@ -54,10 +54,10 @@
           [class.active]="isPriority(3)"
           (click)="togglePriority(3)"
         >
-          Kazne
+          Penalties
 
           @if (isPriority(3)) {
-            <span>★ Prioritetno</span>
+            <span>★ Priority</span>
           }
         </button>
 
@@ -67,10 +67,10 @@
           [class.active]="isPriority(4)"
           (click)="togglePriority(4)"
         >
-          Opšte
+          General
 
           @if (isPriority(4)) {
-            <span>★ Prioritetno</span>
+            <span>★ Priority</span>
           }
         </button>
       </div>
@@ -80,7 +80,7 @@
   <div class="notification-filters">
     <div class="filter-group">
       <label for="typeFilter">
-        Tip notifikacije
+        Notification type
       </label>
 
       <select
@@ -88,23 +88,23 @@
         (change)="onTypeFilterChange($event)"
       >
         <option value="">
-          Sve
+          All
         </option>
 
         <option value="1">
-          Rezervacije
+          Reservations
         </option>
 
         <option value="2">
-          Posudbe
+          Loans
         </option>
 
         <option value="3">
-          Kazne
+          Penalties
         </option>
 
         <option value="4">
-          Opšte
+          General
         </option>
       </select>
     </div>
@@ -119,15 +119,15 @@
         (change)="onReadFilterChange($event)"
       >
         <option value="all">
-          Sve
+          All
         </option>
 
         <option value="unread">
-          Nepročitane
+          Unread
         </option>
 
         <option value="read">
-          Pročitane
+          Read
         </option>
       </select>
     </div>
@@ -135,7 +135,7 @@
 
   @if (loading) {
     <p class="status-message">
-      Učitavanje notifikacija...
+      Loading notifications...
     </p>
   }
 
@@ -162,18 +162,18 @@
 
                 @if (isPriority(notification.type)) {
                   <span class="priority-badge">
-                    ★ Prioritetna
+                    ★ Priority
                   </span>
                 }
               </div>
 
               @if (notification.isRead) {
                 <span class="status read">
-                  Pročitano
+                  Read
                 </span>
               } @else {
                 <span class="status unread-status">
-                  Nepročitano
+                  Unread
                 </span>
               }
             </div>
@@ -183,13 +183,13 @@
             </p>
 
             <p class="notification-date">
-              Poslano:
+              Sent:
               {{ notification.sentAt }}
             </p>
 
             @if (notification.readAt) {
               <p class="notification-date">
-                Pročitano:
+                Read:
                 {{ notification.readAt }}
               </p>
             }
@@ -201,15 +201,15 @@
             (click)="toggleReadStatus(notification)"
           >
             @if (notification.isRead) {
-              Označi kao nepročitano
+              Mark as unread
             } @else {
-              Označi kao pročitano
+              Mark as read
             }
           </button>
         </article>
       } @empty {
         <p class="empty-state">
-          Trenutno nema notifikacija.
+          There are currently no notifications.
         </p>
       }
     </div>

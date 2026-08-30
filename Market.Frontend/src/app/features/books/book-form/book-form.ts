@@ -94,7 +94,7 @@ export class BookForm implements OnInit {
       },
       error: (error) => {
         console.error(error);
-        this.errorMessage = 'Nije moguće učitati knjigu.';
+        this.errorMessage = 'Failed to load the book.';
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -176,21 +176,21 @@ export class BookForm implements OnInit {
 
   private getErrorMessage(error: any): string {
     if (error?.status === 409) {
-      return 'Knjiga sa istim ISBN-om već postoji.';
+      return 'A book with the same ISBN already exists.';
     }
 
     if (error?.status === 400) {
-      return 'Provjeri unesene podatke.';
+      return 'Check the entered data.';
     }
 
     if (error?.status === 401) {
-      return 'Potrebna je prijava korisnika.';
+      return 'Authentication is required.';
     }
 
     if (error?.status === 404) {
-      return 'Traženi podatak nije pronađen.';
+      return 'The requested resource was not found.';
     }
 
-    return 'Došlo je do greške prilikom spremanja knjige.';
+    return 'An error occurred while saving the book.';
   }
 }

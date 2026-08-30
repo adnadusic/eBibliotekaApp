@@ -96,7 +96,7 @@ export class BookList implements OnInit {
         },
         error: (error) => {
           console.error(error);
-          this.errorMessage = 'Nije moguće učitati knjige.';
+          this.errorMessage = 'Failed to load books.';
           this.loading = false;
           this.cdr.detectChanges();
         },
@@ -180,12 +180,12 @@ export class BookList implements OnInit {
 
         if (error?.status === 401) {
           this.errorMessage =
-            'Potrebna je prijava korisnika za brisanje knjige.';
+            'Authentication is required to delete a book.';
           this.cdr.detectChanges();
           return;
         }
 
-        this.errorMessage = 'Brisanje knjige nije uspjelo.';
+        this.errorMessage = 'Failed to delete the book.';
         this.cdr.detectChanges();
       },
     });
