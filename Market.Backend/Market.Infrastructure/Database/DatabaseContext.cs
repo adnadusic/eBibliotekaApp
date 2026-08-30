@@ -7,32 +7,32 @@ public partial class DatabaseContext : DbContext, IAppDbContext
     public DbSet<MarketUserEntity> Users => Set<MarketUserEntity>();
     public DbSet<RefreshTokenEntity> RefreshTokens => Set<RefreshTokenEntity>();
 
-    public DbSet<Knjiga> Knjige { get; set; } = null!;
-    public DbSet<Autor> Autori { get; set; } = null!;
-    public DbSet<Primjerak> Primjerci { get; set; } = null!;
-    public DbSet<Izdavac> Izdavaci { get; set; } = null!;
-    public DbSet<Zanr> Zanrovi { get; set; } = null!;
-    public DbSet<Jezik> Jezici { get; set; } = null!;
-    public DbSet<Grad> Gradovi { get; set; } = null!;
+    public DbSet<Book> Books { get; set; } = null!;
+    public DbSet<Author> Authors { get; set; } = null!;
+    public DbSet<BookCopy> BookCopies { get; set; } = null!;
+    public DbSet<Publisher> Publishers { get; set; } = null!;
+    public DbSet<Genre> Genres { get; set; } = null!;
+    public DbSet<Language> Languages { get; set; } = null!;
+    public DbSet<City> Cities { get; set; } = null!;
 
-    public DbSet<KnjigaAutor> KnjigaAutori { get; set; } = null!;
-    public DbSet<KnjigaZanr> KnjigaZanrovi { get; set; } = null!;
+    public DbSet<BookAuthor> BookAuthors { get; set; } = null!;
+    public DbSet<BookGenre> BookGenres { get; set; } = null!;
 
-    public DbSet<Rezervacija> Rezervacije { get; set; } = null!;
-    public DbSet<Posudba> Posudbe { get; set; } = null!;
-    public DbSet<Produzenje> Produzenja { get; set; } = null!;
+    public DbSet<Reservation> Reservations { get; set; } = null!;
+    public DbSet<Loan> Loans { get; set; } = null!;
+    public DbSet<LoanExtension> LoanExtensions { get; set; } = null!;
 
-    public DbSet<Recenzija> Recenzije { get; set; } = null!;
-    public DbSet<OcjenaRecenzije> OcjeneRecenzija { get; set; } = null!;
+    public DbSet<Review> Reviews { get; set; } = null!;
+    public DbSet<ReviewReaction> ReviewReactions { get; set; } = null!;
 
-    public DbSet<Kazna> Kazne { get; set; } = null!;
-    public DbSet<ListaZelja> ListeZelja { get; set; } = null!;
-    public DbSet<Obavijest> Obavijesti { get; set; } = null!;
-    public DbSet<PostavkaObavijesti> PostavkeObavijesti { get; set; } = null!;
+    public DbSet<Penalty> Penalties { get; set; } = null!;
+    public DbSet<Wishlist> Wishlists { get; set; } = null!;
+    public DbSet<Notification> Notifications { get; set; } = null!;
+    public DbSet<NotificationSetting> NotificationSettings { get; set; } = null!;
     public DbSet<AuditLog> AuditLogs { get; set; } = null!;
 
-    public DbSet<SistemskePostavke> SistemskePostavke { get; set; } = null!;
-    public DbSet<UpravljanjeKorisnicima> UpravljanjeKorisnicima { get; set; } = null!;
+    public DbSet<SystemSetting> SystemSettings { get; set; } = null!;
+    public DbSet<UserManagementLog> UserManagementLogs { get; set; } = null!;
 
     private readonly TimeProvider _clock;
     private readonly IAppCurrentUser _currentUser;
