@@ -3,20 +3,13 @@ using Market.Domain.Entities.Catalog;
 using Market.Domain.Enums;
 
 public sealed class CreateBookCommandHandler(
-    IAppDbContext ctx,
-    IAppCurrentUser currentUser)
+    IAppDbContext ctx)
     : IRequestHandler<CreateBookCommand, CreateBookCommandDto>
 {
     public async Task<CreateBookCommandDto> Handle(
         CreateBookCommand request,
         CancellationToken ct)
     {
-        if (!currentUser.IsAdmin)
-        {
-            throw new UnauthorizedAccessException(
-                "Only administrators can create books.");
-        }
-
         var isbn = request.Isbn.Trim();
 
         var isbnExists = await ctx.Books

@@ -1,8 +1,7 @@
 ﻿namespace Market.Application.Modules.AuditTrail.Queries.GetAuditLogs;
 
 public sealed class GetAuditLogsQueryHandler(
-    IAppDbContext ctx,
-    IAppCurrentUser currentUser)
+    IAppDbContext ctx)
     : IRequestHandler<
         GetAuditLogsQuery,
         List<GetAuditLogsItemDto>>
@@ -11,12 +10,6 @@ public sealed class GetAuditLogsQueryHandler(
         GetAuditLogsQuery request,
         CancellationToken ct)
     {
-        if (!currentUser.IsAdmin)
-        {
-            throw new UnauthorizedAccessException(
-                "Only administrators can view the audit trail.");
-        }
-
         var query = ctx.AuditLogs
             .AsNoTracking()
             .AsQueryable();

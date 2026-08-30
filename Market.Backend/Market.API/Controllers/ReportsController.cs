@@ -1,4 +1,5 @@
-﻿using Market.Application.Modules.Reports.Queries.GetBookReviewsPdf;
+﻿using Market.API.Authorization;
+using Market.Application.Modules.Reports.Queries.GetBookReviewsPdf;
 using Market.Application.Modules.Reports.Queries.GetUserAuditTrailPdf;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -38,6 +39,7 @@ public sealed class ReportsController(IMediator mediator)
     }
 
     [HttpGet("audit-trail")]
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     public async Task<IActionResult> GetAuditTrailPdf(
         [FromQuery] int userId,
         [FromQuery] DateTime dateFrom,

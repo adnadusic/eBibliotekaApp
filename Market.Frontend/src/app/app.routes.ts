@@ -60,7 +60,7 @@ export const routes: Routes = [
   {
     path: 'audit-trail',
     component: AuditTrailPage,
-    canActivate: [authGuard],
+    canActivate: [adminGuard],
   },
   {
     path: 'reports',

@@ -1,4 +1,5 @@
-﻿using Market.Infrastructure.Common;
+﻿using Market.API.Authorization;
+using Market.Infrastructure.Common;
 using Market.Shared.Dtos;
 using Market.Shared.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -65,6 +66,12 @@ public static class DependencyInjection
 
         services.AddAuthorization(o =>
         {
+            o.AddPolicy(
+                AuthorizationPolicies.AdminOnly,
+                policy => policy
+                    .RequireAuthenticatedUser()
+                    .RequireClaim("is_admin", "true"));
+
             o.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .Build();

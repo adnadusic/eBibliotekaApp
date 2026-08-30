@@ -1,4 +1,5 @@
-﻿using Market.Application.Modules.AuditTrail.Queries.GetAuditLogs;
+﻿using Market.API.Authorization;
+using Market.Application.Modules.AuditTrail.Queries.GetAuditLogs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ namespace Market.API.Controllers;
 
 [ApiController]
 [Route("api/audit-trail")]
-[Authorize]
+[Authorize(Policy = AuthorizationPolicies.AdminOnly)]
 public sealed class AuditTrailController(IMediator mediator)
     : ControllerBase
 {

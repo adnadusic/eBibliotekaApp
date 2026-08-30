@@ -6,20 +6,13 @@ using System.Globalization;
 namespace Market.Application.Modules.Reports.Queries.GetUserAuditTrailPdf;
 
 public sealed class GetUserAuditTrailPdfQueryHandler(
-    IAppDbContext ctx,
-    IAppCurrentUser currentUser)
+    IAppDbContext ctx)
     : IRequestHandler<GetUserAuditTrailPdfQuery, byte[]>
 {
     public async Task<byte[]> Handle(
         GetUserAuditTrailPdfQuery request,
         CancellationToken ct)
     {
-        if (!currentUser.IsAdmin)
-        {
-            throw new UnauthorizedAccessException(
-                "Only administrators can generate Audit Trail reports.");
-        }
-
         var dateFrom = request.DateFrom.Date;
         var dateToExclusive = request.DateTo.Date.AddDays(1);
 

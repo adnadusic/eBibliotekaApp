@@ -33,13 +33,15 @@
           Back
         </button>
 
-        <button
-          type="button"
-          class="primary-button"
-          (click)="editBook()"
-        >
-          Edit
-        </button>
+        @if (isAdmin) {
+          <button
+            type="button"
+            class="primary-button"
+            (click)="editBook()"
+          >
+            Edit
+          </button>
+        }
       </div>
     </div>
 

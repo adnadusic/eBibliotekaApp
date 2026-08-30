@@ -3,20 +3,13 @@ using Market.Domain.Entities.Catalog;
 using Market.Domain.Enums;
 
 public sealed class UpdateBookCommandHandler(
-    IAppDbContext ctx,
-    IAppCurrentUser currentUser)
+    IAppDbContext ctx)
     : IRequestHandler<UpdateBookCommand, UpdateBookCommandDto>
 {
     public async Task<UpdateBookCommandDto> Handle(
         UpdateBookCommand request,
         CancellationToken ct)
     {
-        if (!currentUser.IsAdmin)
-        {
-            throw new UnauthorizedAccessException(
-                "Only administrators can update books.");
-        }
-
         var book = await ctx.Books
             .Include(x => x.Authors)
             .Include(x => x.Genres)

@@ -3,6 +3,7 @@ import {
   Component,
 } from '@angular/core';
 
+import { AuthService } from '../../core/services/auth';
 import {
   ReportsService,
 } from '../../core/services/reports';
@@ -29,8 +30,13 @@ export class ReportsPage {
 
   constructor(
     private readonly reportsService: ReportsService,
+    private readonly authService: AuthService,
     private readonly cdr: ChangeDetectorRef
   ) {}
+
+  get isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
 
   onBookIdChange(event: Event): void {
     this.bookId = Number(

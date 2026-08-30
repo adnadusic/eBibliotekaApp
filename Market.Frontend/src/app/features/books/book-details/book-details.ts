@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { AuthService } from '../../../core/services/auth';
 import {
   BookDetails as BookDetailsModel,
   BooksService,
@@ -30,6 +31,7 @@ import {
 export class BookDetailsPage implements OnInit {
   private readonly booksService = inject(BooksService);
   private readonly reviewsService = inject(ReviewsService);
+  private readonly authService = inject(AuthService);
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -45,6 +47,10 @@ export class BookDetailsPage implements OnInit {
   errorMessage = '';
   reviewErrorMessage = '';
   reviewSuccessMessage = '';
+
+  get isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
 
   readonly reviewForm = this.fb.group({
     rating: [

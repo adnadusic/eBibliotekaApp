@@ -17,9 +17,11 @@
         Notifications
       </a>
 
-      <a routerLink="/audit-trail">
-        Audit Trail
-      </a>
+      @if (authService.isAdmin()) {
+        <a routerLink="/audit-trail">
+          Audit Trail
+        </a>
+      }
 
       <a routerLink="/reports">
         PDF Reports
